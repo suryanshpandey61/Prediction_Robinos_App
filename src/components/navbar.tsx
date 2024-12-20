@@ -111,7 +111,7 @@ function Navbar() {
   return (
     <div>
       {/* Navbar */}
-      <div className="flex mt-[10px] ml-[850px]">
+      <div className="flex mt-[20px] ml-[700px]">
         <div className="rounded-[10px] font-medium text-14 relative gradient hidden md:flex mr-[10px]">
           <div className="flex items-center h-[50px] p-[2px] relative">
             <button

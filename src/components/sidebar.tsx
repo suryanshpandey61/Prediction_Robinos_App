@@ -7,7 +7,7 @@ import logo from "../assets/robinos_islogo.svg"
 
 function sidebar() {
     return (
-        <div className='w-[280px] h-[100vh] pt-[20px] pl-[20px] space-y-[px] bg-[#061230] text-white'>
+        <div className='w-[350px] h-[100vh] pt-[20px] pl-[20px] space-y-[px] bg-[#061230] text-white'>
             <div className=' h-[110px] '>
                 <a href=''>
                     <Image src={logo} alt="Robinos logo" loading="lazy" width="150" height="100" decoding="async" data-nimg="1" className="h-[52px] w-auto" />
