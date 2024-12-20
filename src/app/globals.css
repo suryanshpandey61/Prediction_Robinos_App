@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.bg-gradient{
+  background-image: url('../assets/bg.png');
+  background-position-x: 50%;
+  background-position-y: 0%;
+  background-size: auto 150%;
+}
+.img{
+  background-image: url('../assets/robinos_islogo.svg');
+}
+.gradient{
+  background: linear-gradient(90deg,#00ffcf,#5d5dff 35% ,#fd85d5 70%);
+}
+.bg{
+  background: linear-gradient(26deg, rgba(0, 255, 207, .1), rgba(93, 93, 255, .3) 35%, rgba(253, 133, 213, .7) 90%, rgba(253, 230, 52, .1));;
+}
