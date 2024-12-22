@@ -27,8 +27,8 @@ const OngoingEvents:React.FC = () =>  {
   return (
     <div className='text-white ml-[105px] mt-8 '>
        {
-        data.map((items)=>(
-          <div className='bg-[#2D2F6F] w-[450px] border border-pink-400 rounded-lg '>
+        data.map((items,index)=>(
+          <div key={index} className='bg-[#2D2F6F] w-[450px] border border-pink-400 rounded-lg '>
             {/* <p key={items.eventCode}>{items.eventCode}</p> */}
             <p className='text-slate-400 font-bold pl-4'>{items.league}</p>
             <div className='flex gap-x-2 text-[20px] pl-4 font-serif mt-5'>
