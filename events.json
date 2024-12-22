@@ -1,0 +1,18 @@
+
+[
+    {
+      "eventCode":"IPL 24/25  MI vs  KKR",
+      "league":"IPL 24/25",
+      "teamA":{
+          "name":"Mumbai Indians",
+          "img":""
+      },
+      "teamB":{
+          "name":"Kolkata Knight Riders",
+          "img":""
+      },
+      "saleStart":"22/12/2024 (16:45:55)",
+      "saleEnds":"25/12/2024  (16:45:55)"
+    }
+  
+  ]
