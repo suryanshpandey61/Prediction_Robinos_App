@@ -16,12 +16,13 @@ interface Event {
   saleEnds: string;
 }
 
+
 const OngoingEvents: React.FC = () => {
   const [data, setData] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedWinner, setSelectedWinner] = useState<string | null>(null);
-  const [amount, setAmount] = useState<string>('');
+  const [amount, setAmount] = useState<string>(''); 
   const [isWalletConnected, setIsWalletConnected] = useState<boolean>(false);
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
 
@@ -32,8 +33,8 @@ const OngoingEvents: React.FC = () => {
   const openModal = (event: Event) => {
     setSelectedEvent(event);
     setIsModalOpen(true);
-    setSelectedWinner(null); // Reset winner selection when opening modal
-    setAmount(''); // Reset amount input
+    setSelectedWinner(null); 
+    setAmount('');
   };
 
   const closeModal = () => {
@@ -45,10 +46,8 @@ const OngoingEvents: React.FC = () => {
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-
-    // Check if the input value is a valid positive number
     if (parseFloat(value) >= 0 || value === "") {
-      setAmount(value); // Set the amount if it's valid (positive or empty)
+      setAmount(value);
     }
   };
 
@@ -59,7 +58,6 @@ const OngoingEvents: React.FC = () => {
   const handleSubmit = () => {
     if (selectedWinner && amount) {
       alert(`You selected ${selectedWinner} as the winner with a wager of ${amount}`);
-      // You can add further logic to handle the submission of this data
     } else {
       alert('Please select a winner and enter a valid amount.');
     }
@@ -118,7 +116,6 @@ const OngoingEvents: React.FC = () => {
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-[#2D2F6F] p-8 w-[600px] rounded-lg">
             <h2 className="text-white text-2xl font-bold mb-4">Prize Pool Information</h2>
-          
 
             {/* Connect/Disconnect Wallet Button */}
             {!isWalletConnected ? (
@@ -145,7 +142,6 @@ const OngoingEvents: React.FC = () => {
             {/* Team Cards for Winner Selection */}
             {isWalletConnected && (
               <div className="flex justify-between mb-4">
-                {/* Team A Card */}
                 <div
                   className={`w-[250px] p-4 text-center rounded-lg cursor-pointer border-2 ${selectedWinner === selectedEvent.teamA.name ? 'border-green-500' : 'border-gray-300'} transition-all hover:border-green-500`}
                   onClick={() => handleWinnerChange(selectedEvent.teamA.name)}
@@ -154,7 +150,6 @@ const OngoingEvents: React.FC = () => {
                   <p className="text-white mt-2">{selectedEvent.teamA.name}</p>
                 </div>
 
-                {/* Team B Card */}
                 <div
                   className={`w-[250px] p-4 text-center rounded-lg cursor-pointer border-2 ${selectedWinner === selectedEvent.teamB.name ? 'border-green-500' : 'border-gray-300'} transition-all hover:border-green-500`}
                   onClick={() => handleWinnerChange(selectedEvent.teamB.name)}
@@ -188,7 +183,7 @@ const OngoingEvents: React.FC = () => {
             )}
 
             {/* Submit Button */}
-            {selectedWinner && isWalletConnected && amount && (
+            {isWalletConnected && selectedWinner && amount && (
               <div className="mt-4 flex justify-center gap-x-4">
                 <button
                   className="bg-green-500 text-white px-6 py-2 rounded-lg"
