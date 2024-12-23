@@ -118,14 +118,32 @@ const OngoingEvents: React.FC = () => {
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-[#2D2F6F] p-8 w-[600px] rounded-lg">
             <h2 className="text-white text-2xl font-bold mb-4">Prize Pool Information</h2>
-            <p className="text-white text-xl mb-4">Event Code: {selectedEvent.eventCode}</p>
-            <p className="text-white text-xl mb-4">League: {selectedEvent.league}</p>
-            <p className="text-white text-xl mb-4">Teams: {selectedEvent.teamA.name} vs {selectedEvent.teamB.name}</p>
-            <p className="text-white text-xl mb-4">Sale Start: {selectedEvent.saleStart}</p>
-            <p className="text-white text-xl mb-4">Sale End: {selectedEvent.saleEnds}</p>
+          
+
+            {/* Connect/Disconnect Wallet Button */}
+            {!isWalletConnected ? (
+              <div className="flex justify-center">
+                <button
+                  className="bg-blue-500 text-white px-6 py-2 rounded-lg mb-4"
+                  onClick={connectWallet}
+                >
+                  Connect Wallet
+                </button>
+              </div>
+            ) : (
+              <div className="text-white text-center mb-4">
+                <p>Wallet Connected: {walletAddress}</p>
+                <button
+                  className="bg-red-500 text-white px-6 py-2 rounded-lg mt-4"
+                  onClick={disconnectWallet}
+                >
+                  Disconnect Wallet
+                </button>
+              </div>
+            )}
 
             {/* Team Cards for Winner Selection */}
-            {selectedWinner && (
+            {isWalletConnected && (
               <div className="flex justify-between mb-4">
                 {/* Team A Card */}
                 <div
@@ -148,15 +166,15 @@ const OngoingEvents: React.FC = () => {
             )}
 
             {/* Preview Card (Selected Team) */}
-            {selectedWinner && (
+            {selectedWinner && isWalletConnected && (
               <div className="mt-4 bg-[#453982] p-4 rounded-lg flex justify-between items-center">
                 <div className="text-3xl">{selectedWinner === selectedEvent.teamA.name ? selectedEvent.teamA.symbol : selectedEvent.teamB.symbol}</div>
                 <p className="text-white text-xl">{selectedWinner} <span className="text-green-500">✔</span></p>
               </div>
             )}
 
-            {/* Show Amount Input only if a winner is selected */}
-            {selectedWinner && (
+            {/* Show Amount Input only if a winner is selected and wallet is connected */}
+            {selectedWinner && isWalletConnected && (
               <div className="mb-4">
                 <p className="text-white text-xl mb-2">Enter Amount</p>
                 <input
@@ -169,20 +187,8 @@ const OngoingEvents: React.FC = () => {
               </div>
             )}
 
-            {/* Show Connect Wallet Button only after Amount has been entered */}
-            {amount && !isWalletConnected && (
-              <div className="flex justify-center mb-4">
-                <button
-                  className="bg-blue-500 text-white px-6 py-2 rounded-lg"
-                  onClick={connectWallet}
-                >
-                  Connect Wallet
-                </button>
-              </div>
-            )}
-
-            {/* Submit Button after Wallet is Connected */}
-            {amount && isWalletConnected && (
+            {/* Submit Button */}
+            {selectedWinner && isWalletConnected && amount && (
               <div className="mt-4 flex justify-center gap-x-4">
                 <button
                   className="bg-green-500 text-white px-6 py-2 rounded-lg"
@@ -194,9 +200,9 @@ const OngoingEvents: React.FC = () => {
             )}
 
             {/* Disable Submit Button if No Wallet or No Amount */}
-            {amount && !isWalletConnected && (
+            {(!isWalletConnected || !selectedWinner || !amount) && (
               <div className="mt-4 text-center text-white">
-                <p className="text-red-500">Please connect wallet before submitting.</p>
+                <p className="text-red-500">Please connect wallet, select a team and enter an amount.</p>
               </div>
             )}
 
