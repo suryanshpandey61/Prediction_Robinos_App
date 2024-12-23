@@ -5,14 +5,32 @@
       "league":"IPL 24/25",
       "teamA":{
           "name":"Mumbai Indians",
-          "img":""
+          "img":"",
+          "symbol":"MI"
       },
       "teamB":{
           "name":"Kolkata Knight Riders",
-          "img":""
+          "img":"",
+          "symbol":"KKR"
       },
       "saleStart":"22/12/2024 (23:10:15)",
       "saleEnds":"25/12/2024  (16:45:55)"
+    },
+    {
+      "eventCode":"IPL 24/25  RCB v. CSK",
+      "league":"IPL 24/25",
+      "teamA":{
+          "name":"Royal Challengers Banglore",
+          "img":"",
+          "symbol":"RCB"
+      },
+      "teamB":{
+          "name":"Chennai Super Kings",
+          "img":"",
+          "symbol":"CSK"
+      },
+      "saleStart":"23/12/2024 (18:35:26)",
+      "saleEnds":"25/12/2024  (18:35:26 )"
     }
   
   ]

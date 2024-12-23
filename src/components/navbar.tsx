@@ -22,7 +22,7 @@ function Navbar() {
     { name: "MetaMask", logo: metamaskLogo, installUrl: "https://metamask.io/" },
     { name: "Rainbow", logo: rainbow, installUrl: "https://rainbow.me/" },
     { name: "Coinbase", logo: coinbase, installUrl: "https://www.coinbase.com" },
-    // { name: "WalletConnect", logo: metamaskLogo, installUrl: "https://walletconnect.com/" },
+ 
   ];
 
   useEffect(() => {
