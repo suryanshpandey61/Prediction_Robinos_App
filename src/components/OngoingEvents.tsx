@@ -16,7 +16,6 @@ interface Event {
   saleEnds: string;
 }
 
-
 const OngoingEvents: React.FC = () => {
   const [data, setData] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
@@ -116,41 +115,51 @@ const OngoingEvents: React.FC = () => {
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-[#2D2F6F] p-8 w-[600px] rounded-lg">
             <h2 className="text-white text-2xl font-bold mb-4">Prize Pool Information</h2>
-
-            {/* Connect/Disconnect Wallet Button */}
-            
-
+            <h1 className='text-white font-semibold text-xl mb-3'>Select Winner </h1> 
             {/* Team Cards for Winner Selection */}
-            {  (
-              <div className="flex justify-between mb-4">
-                <div
-                  className={`w-[250px] p-4 text-center rounded-lg cursor-pointer border-2 ${selectedWinner === selectedEvent.teamA.name ? 'border-green-500' : 'border-gray-300'} transition-all hover:border-green-500`}
-                  onClick={() => handleWinnerChange(selectedEvent.teamA.name)}
-                >
-                  <div className="text-4xl">{selectedEvent.teamA.symbol}</div>
-                  <p className="text-white mt-2">{selectedEvent.teamA.name}</p>
-                </div>
-
-                <div
-                  className={`w-[250px] p-4 text-center rounded-lg cursor-pointer border-2 ${selectedWinner === selectedEvent.teamB.name ? 'border-green-500' : 'border-gray-300'} transition-all hover:border-green-500`}
-                  onClick={() => handleWinnerChange(selectedEvent.teamB.name)}
-                >
-                  <div className="text-4xl">{selectedEvent.teamB.symbol}</div>
-                  <p className="text-white mt-2">{selectedEvent.teamB.name}</p>
-                </div>
+            <div className="flex justify-between mb-4">
+            
+              <div
+                className={`w-[250px] p-4 text-center rounded-lg cursor-pointer border-2 ${selectedWinner === selectedEvent.teamA.name ? 'border-green-500' : 'border-gray-300'} transition-all hover:border-green-500`}
+                onClick={() => handleWinnerChange(selectedEvent.teamA.name)}
+              >
+                <div className="text-4xl">{selectedEvent.teamA.symbol}</div>
+                <p className="text-white mt-2">{selectedEvent.teamA.name}</p>
               </div>
-            )}
+
+              <div
+                className={`w-[250px] p-4 text-center rounded-lg cursor-pointer border-2 ${selectedWinner === selectedEvent.teamB.name ? 'border-green-500' : 'border-gray-300'} transition-all hover:border-green-500`}
+                onClick={() => handleWinnerChange(selectedEvent.teamB.name)}
+              >
+                <div className="text-4xl">{selectedEvent.teamB.symbol}</div>
+                <p className="text-white mt-2">{selectedEvent.teamB.name}</p>
+              </div>
+
+  
+            </div>
+
+            {selectedWinner && (
+  <p className="text-white text-xl mt-4 text-center">
+    You selected {selectedWinner}
+  </p>
+)}
 
             {/* Preview Card (Selected Team) */}
             {selectedWinner && isWalletConnected && (
+              
               <div className="mt-4 bg-[#453982] p-4 rounded-lg flex justify-between items-center">
-                <div className="text-3xl">{selectedWinner === selectedEvent.teamA.name ? selectedEvent.teamA.symbol : selectedEvent.teamB.symbol}</div>
-                <p className="text-white text-xl">{selectedWinner} <span className="text-green-500">✔</span></p>
+                
+                <div className="text-3xl">
+                  {selectedWinner === selectedEvent.teamA.name ? selectedEvent.teamA.symbol : selectedEvent.teamB.symbol}
+                </div>
+                <p className="text-white text-xl">
+                  {selectedWinner} <span className="text-green-500">✔</span>
+                </p>
               </div>
             )}
 
             {/* Show Amount Input only if a winner is selected and wallet is connected */}
-            {selectedWinner  && (
+            {selectedWinner && (
               <div className="mb-4">
                 <p className="text-white text-xl mb-2">Enter Amount</p>
                 <input
@@ -175,12 +184,10 @@ const OngoingEvents: React.FC = () => {
               </div>
             )}
 
-           
-            
-
+            {/* Close Modal Button */}
             <div className="mt-4 flex justify-center gap-x-4">
               <button
-                className="bg-red-500 text-white px-6 py-2 rounded-lg"
+                className="bg-slate-900 text-white px-6 py-2 rounded-lg"
                 onClick={closeModal}
               >
                 ❌
@@ -193,5 +200,4 @@ const OngoingEvents: React.FC = () => {
   );
 };
 
-
-export default OngoingEvents
+export default OngoingEvents;
