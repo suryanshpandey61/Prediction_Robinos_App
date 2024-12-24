@@ -183,7 +183,7 @@ const OngoingEvents: React.FC = () => {
                 className="bg-red-500 text-white px-6 py-2 rounded-lg"
                 onClick={closeModal}
               >
-                Close
+                ❌
               </button>
             </div>
           </div>
