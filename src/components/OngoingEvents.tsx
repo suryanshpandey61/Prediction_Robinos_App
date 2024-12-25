@@ -23,8 +23,9 @@ const OngoingEvents: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedWinner, setSelectedWinner] = useState<string | null>(null);
   const [amount, setAmount] = useState<string>(''); 
-  const [isWalletConnected, setIsWalletConnected] = useState<boolean>(false);
-  const [walletAddress, setWalletAddress] = useState<string | null>(null);
+  const [tokenAddress, setTokenAddress] = useState<string>('');  // State for token address input by the user
+  const [userTokenAddress, setUserTokenAddress] = useState<string>(''); // Token address entered by user to deduct from
+
   const [tokenContract, setTokenContract] = useState<any | null>(null);  // State for token contract
 
   useEffect(() => {
@@ -32,18 +33,17 @@ const OngoingEvents: React.FC = () => {
 
     // Function to initialize the contract asynchronously
     const initializeContract = async () => {
-      if (window.ethereum) {
+      if (window.ethereum && userTokenAddress) {
         try {
           // Initialize provider and signer
           const provider = new ethers.BrowserProvider(window.ethereum);
           const signer = await provider.getSigner();  // 'await' now inside an async function
-          const tokenAddress = '0x64b08Bdbafa6F19CE1c11bE2b8AB7aB7447Ff125';
           const tokenABI = [
             'function transfer(address to, uint amount) public returns (bool)',
             'function transferFrom(address from, address to, uint amount) public returns (bool)'
           ];
           
-          const contract = new ethers.Contract(tokenAddress, tokenABI, signer); // Correct contract initialization
+          const contract = new ethers.Contract(userTokenAddress, tokenABI, signer); // Correct contract initialization
           setTokenContract(contract);
         } catch (error) {
           console.error("Error initializing contract:", error);
@@ -54,9 +54,11 @@ const OngoingEvents: React.FC = () => {
       }
     };
 
-    initializeContract(); // Call async function
+    if (userTokenAddress) {
+      initializeContract(); // Call async function only if token address is set
+    }
 
-  }, []);  // Empty dependency array to run on mount
+  }, [userTokenAddress]);  // Dependency on userTokenAddress to initialize contract when it's updated
 
   const openModal = (event: Event) => {
     setSelectedEvent(event);
@@ -84,12 +86,13 @@ const OngoingEvents: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    if (selectedWinner && amount && tokenContract && walletAddress) {
+    if (selectedWinner && amount && tokenContract && userTokenAddress) {
       try {
-        const amountInWei = ethers.parseUnits(amount, 18); // Convert to Wei (assuming 18 decimals)
+        // Convert amount to Wei (assuming 18 decimals)
+        const amountInWei = ethers.parseUnits(amount, 18);
         
         // Call transferFrom method to transfer tokens
-        const tx = await tokenContract.transferFrom(walletAddress, selectedEvent?.teamA.name === selectedWinner ? selectedEvent.teamA.name : selectedEvent.teamB.name, amountInWei);
+        const tx = await tokenContract.transferFrom(userTokenAddress, selectedEvent?.teamA.name === selectedWinner ? selectedEvent.teamA.name : selectedEvent.teamB.name, amountInWei);
 
         await tx.wait();  // Wait for the transaction to be mined
 
@@ -99,28 +102,8 @@ const OngoingEvents: React.FC = () => {
         alert('Failed to submit wager.');
       }
     } else {
-      alert('Please select a winner, enter a valid amount, and ensure wallet is connected.');
+      alert('Please select a winner, enter a valid amount, and ensure contract is initialized.');
     }
-  };
-
-  const connectWallet = async () => {
-    if (window.ethereum) {
-      try {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        setWalletAddress(accounts[0]);
-        setIsWalletConnected(true);
-      } catch (error) {
-        console.error("Error connecting wallet:", error);
-        alert("Failed to connect wallet.");
-      }
-    } else {
-      alert("Please install MetaMask or an Ethereum-compatible browser wallet.");
-    }
-  };
-
-  const disconnectWallet = () => {
-    setWalletAddress(null);
-    setIsWalletConnected(false);
   };
 
   return (
@@ -178,7 +161,7 @@ const OngoingEvents: React.FC = () => {
             </div>
 
             {/* Preview Card (Selected Team) */}
-            {selectedWinner && isWalletConnected && (
+            {selectedWinner && (
               <div className="mt-4 bg-[#453982] p-4 rounded-lg flex justify-between items-center">
                 <div className="text-3xl">
                   {selectedWinner === selectedEvent.teamA.name ? selectedEvent.teamA.symbol : selectedEvent.teamB.symbol}
@@ -189,7 +172,7 @@ const OngoingEvents: React.FC = () => {
               </div>
             )}
 
-            {/* Show Amount Input only if a winner is selected and wallet is connected */}
+            {/* Show Amount Input only if a winner is selected */}
             {selectedWinner && (
               <div className="mb-4">
                 <p className="text-white text-xl mb-2">Enter Amount</p>
@@ -199,6 +182,20 @@ const OngoingEvents: React.FC = () => {
                   onChange={handleAmountChange}
                   className="w-full p-2 rounded-lg border-2 border-pink-300 text-black"
                   placeholder="Amount"
+                />
+              </div>
+            )}
+
+            {/* Add token address input */}
+            {selectedWinner && (
+              <div className="mb-4">
+                <p className="text-white text-xl mb-2">Enter Token Address</p>
+                <input
+                  type="text"
+                  value={userTokenAddress}
+                  onChange={(e) => setUserTokenAddress(e.target.value)}
+                  className="w-full p-2 rounded-lg border-2 border-pink-300 text-black"
+                  placeholder="Token Address"
                 />
               </div>
             )}
@@ -218,27 +215,6 @@ const OngoingEvents: React.FC = () => {
               </button>
             </div>
           </div>
-        </div>
-      )}
-
-      {/* Connect Wallet Button */}
-      {!isWalletConnected && (
-        <button
-          onClick={connectWallet}
-          className="bg-blue-500 text-white px-6 py-2 rounded-lg mt-8"
-        >
-          Connect Wallet
-        </button>
-      )}
-      {isWalletConnected && walletAddress && (
-        <div className="mt-8">
-          <p className="text-white">Wallet Address: {walletAddress}</p>
-          <button
-            onClick={disconnectWallet}
-            className="bg-red-500 text-white px-6 py-2 rounded-lg mt-4"
-          >
-            Disconnect Wallet
-          </button>
         </div>
       )}
     </div>
