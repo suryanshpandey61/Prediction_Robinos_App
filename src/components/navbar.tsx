@@ -16,26 +16,39 @@ function Navbar() {
     Coinbase: false,
     WalletConnect: false,
   });
+  const [account, setAccount] = useState<string | null>(null); // Store the connected account
 
   const networks = ["Telos", "Taiko", "Mantle"];
   const wallets = [
     { name: "MetaMask", logo: metamaskLogo, installUrl: "https://metamask.io/" },
     { name: "Rainbow", logo: rainbow, installUrl: "https://rainbow.me/" },
     { name: "Coinbase", logo: coinbase, installUrl: "https://www.coinbase.com" },
- 
   ];
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const detectWallets = () => {
         setInstalledWallets({
-          MetaMask: !!window.ethereum && !!window.ethereum.isMetaMask, // Detect MetaMask
-          Rainbow: !!window.ethereum && !!window.ethereum.isRainbow, // Detect Rainbow
-          Coinbase: !!window.ethereum && !!window.ethereum.isCoinbaseWallet, // Detect Coinbase
+          MetaMask: !!window.ethereum && !!window.ethereum.isMetaMask,
+          Rainbow: !!window.ethereum && !!window.ethereum.isRainbow,
+          Coinbase: !!window.ethereum && !!window.ethereum.isCoinbaseWallet,
         });
       };
 
       detectWallets();
+
+      if (window.ethereum && window.ethereum.isMetaMask) {
+        window.ethereum
+          .request({ method: "eth_accounts" })
+          .then((accounts: string[]) => {
+            if (accounts.length > 0) {
+              setAccount(accounts[0]);
+            }
+          })
+          .catch((error: any) => {
+            console.error("Error fetching accounts:", error);
+          });
+      }
     }
   }, []);
 
@@ -51,7 +64,7 @@ function Navbar() {
             window.ethereum
               ?.request({ method: "eth_requestAccounts" })
               .then((accounts: string[]) => {
-                console.log("Connected to MetaMask:", accounts[0]);
+                setAccount(accounts[0]);
               })
               .catch((error: any) => {
                 console.error("Error connecting to MetaMask:", error);
@@ -64,7 +77,7 @@ function Navbar() {
             window.ethereum
               .request({ method: "eth_requestAccounts" })
               .then((accounts: string[]) => {
-                console.log("Connected to Rainbow:", accounts[0]);
+                setAccount(accounts[0]);
               })
               .catch((error: any) => {
                 console.error("Error connecting to Rainbow:", error);
@@ -77,7 +90,7 @@ function Navbar() {
             window.ethereum
               .request({ method: "eth_requestAccounts" })
               .then((accounts: string[]) => {
-                console.log("Connected to Coinbase Wallet:", accounts[0]);
+                setAccount(accounts[0]);
               })
               .catch((error: any) => {
                 console.error("Error connecting to Coinbase Wallet:", error);
@@ -90,7 +103,6 @@ function Navbar() {
           break;
       }
     } else {
-      console.log(`${walletName} is not installed. Redirecting to installation.`);
       window.open(wallet.installUrl, "_blank");
     }
   };
@@ -106,6 +118,10 @@ function Navbar() {
 
   const toggleModal = (): void => {
     setIsModalOpen((prev) => !prev);
+  };
+
+  const handleDisconnect = () => {
+    setAccount(null); // Clear the connected account to simulate a disconnection
   };
 
   return (
@@ -142,12 +158,16 @@ function Navbar() {
           onClick={toggleModal}
         >
           <div className="flex items-center justify-center h-[50px]">
-            <span>Connect wallet</span>
+            <span>
+              {account
+                ? `Connected: ${account.slice(0, 6)}...`
+                : "Connect wallet"}
+            </span>
           </div>
         </div>
       </div>
 
-      {/* Modal */}
+      {/* Modal for wallet selection */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
           <div className="bg-slate-900 text-white rounded-lg p-6 w-[350px]">
@@ -184,7 +204,32 @@ function Navbar() {
                   </div>
                 </div>
               ))}
+
+              {/* Display MetaMask Connect button if MetaMask is installed */}
+              {installedWallets.MetaMask && !account && (
+                <div
+                  className="mt-4 flex items-center p-4 rounded-2xl bg-slate-800 hover:bg-slate-700 cursor-pointer"
+                  onClick={() => handleWalletSelection("MetaMask")}
+                >
+                  <Image
+                    src={metamaskLogo}
+                    alt="MetaMask"
+                    className="w-12 h-12 mr-4 rounded-lg"
+                  />
+                  <span className="text-sm">Connect Wallet</span>
+                </div>
+              )}
             </div>
+
+            {/* Show Disconnect button if MetaMask is connected */}
+            {account && window.ethereum && window.ethereum.isMetaMask && (
+              <div
+                className="mt-4 hover:text-white text-red-500 bg-slate-800 px-4 py-2 rounded-md hover:bg-red-600 transition cursor-pointer"
+                onClick={handleDisconnect}
+              >
+                Disconnect MetaMask
+              </div>
+            )}
           </div>
         </div>
       )}

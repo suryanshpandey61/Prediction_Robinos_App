@@ -40,7 +40,8 @@ const OngoingEvents: React.FC = () => {
           const signer = await provider.getSigner();  // 'await' now inside an async function
           const tokenABI = [
             'function transfer(address to, uint amount) public returns (bool)',
-            'function transferFrom(address from, address to, uint amount) public returns (bool)'
+            'function transferFrom(address from, address to, uint amount) public returns (bool)',
+            'function balanceOf(address owner) public view returns (uint256)'
           ];
           
           const contract = new ethers.Contract(userTokenAddress, tokenABI, signer); // Correct contract initialization
@@ -65,6 +66,7 @@ const OngoingEvents: React.FC = () => {
     setIsModalOpen(true);
     setSelectedWinner(null); 
     setAmount('');
+    setUserTokenAddress('');  // Reset token address input when opening modal
   };
 
   const closeModal = () => {
@@ -72,6 +74,7 @@ const OngoingEvents: React.FC = () => {
     setSelectedEvent(null);
     setSelectedWinner(null);
     setAmount('');
+    setUserTokenAddress('');
   };
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,17 +88,38 @@ const OngoingEvents: React.FC = () => {
     setSelectedWinner(winner);
   };
 
+  const teamAddressMap: { [key: string]: string } = {
+    "Team A": "0xAddressForTeamA",  // Replace with actual Ethereum address
+    "Team B": "0xAddressForTeamB",  // Replace with actual Ethereum address
+  };
+
   const handleSubmit = async () => {
     if (selectedWinner && amount && tokenContract && userTokenAddress) {
       try {
         // Convert amount to Wei (assuming 18 decimals)
-        const amountInWei = ethers.parseUnits(amount, 18);
+        const amountInWei = ethers.parseUnits(amount, 18); // amountInWei is now a BigNumber
         
-        // Call transferFrom method to transfer tokens
-        const tx = await tokenContract.transferFrom(userTokenAddress, selectedEvent?.teamA.name === selectedWinner ? selectedEvent.teamA.name : selectedEvent.teamB.name, amountInWei);
-
+        // Ensure the balance is a BigNumber
+        const balance = await tokenContract.balanceOf(userTokenAddress);
+        
+        // Compare the balance using BigNumber's lt() method
+        if (balance.lt(amountInWei)) {
+          alert("Insufficient balance in the provided token address.");
+          return;
+        }
+  
+        // Map selected winner (team name) to Ethereum address
+        const winnerAddress = teamAddressMap[selectedWinner];
+        if (!winnerAddress) {
+          alert("Invalid winner selected.");
+          return;
+        }
+  
+        // Call transferFrom method to transfer tokens from the user address
+        const tx = await tokenContract.transferFrom(userTokenAddress, winnerAddress, amountInWei);
+    
         await tx.wait();  // Wait for the transaction to be mined
-
+    
         alert(`Transaction successful! You selected ${selectedWinner} with a wager of ${amount}`);
       } catch (error) {
         console.error('Error making transaction:', error);
@@ -105,6 +129,7 @@ const OngoingEvents: React.FC = () => {
       alert('Please select a winner, enter a valid amount, and ensure contract is initialized.');
     }
   };
+  
 
   return (
     <div className="text-white ml-[105px] flex gap-x-5 mt-8">
