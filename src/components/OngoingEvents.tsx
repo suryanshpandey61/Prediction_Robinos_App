@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import eventData from "../../events.json";
+import { ethers } from 'ethers';  // Import ethers
 
 interface Team {
   name: string;
@@ -24,10 +25,38 @@ const OngoingEvents: React.FC = () => {
   const [amount, setAmount] = useState<string>(''); 
   const [isWalletConnected, setIsWalletConnected] = useState<boolean>(false);
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
+  const [tokenContract, setTokenContract] = useState<any | null>(null);  // State for token contract
 
   useEffect(() => {
     setData(eventData);
-  }, []);
+
+    // Function to initialize the contract asynchronously
+    const initializeContract = async () => {
+      if (window.ethereum) {
+        try {
+          // Initialize provider and signer
+          const provider = new ethers.BrowserProvider(window.ethereum);
+          const signer = await provider.getSigner();  // 'await' now inside an async function
+          const tokenAddress = '0x64b08Bdbafa6F19CE1c11bE2b8AB7aB7447Ff125';
+          const tokenABI = [
+            'function transfer(address to, uint amount) public returns (bool)',
+            'function transferFrom(address from, address to, uint amount) public returns (bool)'
+          ];
+          
+          const contract = new ethers.Contract(tokenAddress, tokenABI, signer); // Correct contract initialization
+          setTokenContract(contract);
+        } catch (error) {
+          console.error("Error initializing contract:", error);
+          alert("Failed to initialize the contract.");
+        }
+      } else {
+        alert('Please install MetaMask or an Ethereum-compatible browser wallet.');
+      }
+    };
+
+    initializeContract(); // Call async function
+
+  }, []);  // Empty dependency array to run on mount
 
   const openModal = (event: Event) => {
     setSelectedEvent(event);
@@ -54,11 +83,23 @@ const OngoingEvents: React.FC = () => {
     setSelectedWinner(winner);
   };
 
-  const handleSubmit = () => {
-    if (selectedWinner && amount) {
-      alert(`You selected ${selectedWinner} as the winner with a wager of ${amount}`);
+  const handleSubmit = async () => {
+    if (selectedWinner && amount && tokenContract && walletAddress) {
+      try {
+        const amountInWei = ethers.parseUnits(amount, 18); // Convert to Wei (assuming 18 decimals)
+        
+        // Call transferFrom method to transfer tokens
+        const tx = await tokenContract.transferFrom(walletAddress, selectedEvent?.teamA.name === selectedWinner ? selectedEvent.teamA.name : selectedEvent.teamB.name, amountInWei);
+
+        await tx.wait();  // Wait for the transaction to be mined
+
+        alert(`Transaction successful! You selected ${selectedWinner} with a wager of ${amount}`);
+      } catch (error) {
+        console.error('Error making transaction:', error);
+        alert('Failed to submit wager.');
+      }
     } else {
-      alert('Please select a winner and enter a valid amount.');
+      alert('Please select a winner, enter a valid amount, and ensure wallet is connected.');
     }
   };
 
@@ -134,21 +175,11 @@ const OngoingEvents: React.FC = () => {
                 <div className="text-4xl">{selectedEvent.teamB.symbol}</div>
                 <p className="text-white mt-2">{selectedEvent.teamB.name}</p>
               </div>
-
-  
             </div>
-
-            {selectedWinner && (
-  <p className="text-white text-xl mt-4 text-center">
-    You selected {selectedWinner}
-  </p>
-)}
 
             {/* Preview Card (Selected Team) */}
             {selectedWinner && isWalletConnected && (
-              
               <div className="mt-4 bg-[#453982] p-4 rounded-lg flex justify-between items-center">
-                
                 <div className="text-3xl">
                   {selectedWinner === selectedEvent.teamA.name ? selectedEvent.teamA.symbol : selectedEvent.teamB.symbol}
                 </div>
@@ -166,34 +197,48 @@ const OngoingEvents: React.FC = () => {
                   type="number"
                   value={amount}
                   onChange={handleAmountChange}
-                  placeholder="Enter amount"
-                  className="bg-[#453982] border border-pink-200 text-white px-4 py-2 rounded-lg w-full"
+                  className="w-full p-2 rounded-lg border-2 border-pink-300 text-black"
+                  placeholder="Amount"
                 />
               </div>
             )}
 
-            {/* Submit Button */}
-            {selectedWinner && amount && (
-              <div className="mt-4 flex justify-center gap-x-4">
-                <button
-                  className="bg-green-500 text-white px-6 py-2 rounded-lg"
-                  onClick={handleSubmit}
-                >
-                  Submit
-                </button>
-              </div>
-            )}
-
-            {/* Close Modal Button */}
-            <div className="mt-4 flex justify-center gap-x-4">
+            <div className="flex justify-between gap-5">
               <button
-                className="bg-slate-900 text-white px-6 py-2 rounded-lg"
                 onClick={closeModal}
+                className="bg-red-500 text-white py-2 px-6 rounded-lg hover:bg-red-700"
               >
-                ❌
+                Close
+              </button>
+              <button
+                onClick={handleSubmit}
+                className="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-700"
+              >
+                Submit
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Connect Wallet Button */}
+      {!isWalletConnected && (
+        <button
+          onClick={connectWallet}
+          className="bg-blue-500 text-white px-6 py-2 rounded-lg mt-8"
+        >
+          Connect Wallet
+        </button>
+      )}
+      {isWalletConnected && walletAddress && (
+        <div className="mt-8">
+          <p className="text-white">Wallet Address: {walletAddress}</p>
+          <button
+            onClick={disconnectWallet}
+            className="bg-red-500 text-white px-6 py-2 rounded-lg mt-4"
+          >
+            Disconnect Wallet
+          </button>
         </div>
       )}
     </div>
