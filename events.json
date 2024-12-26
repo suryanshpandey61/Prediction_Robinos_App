@@ -2,6 +2,7 @@
 [
     {
       "eventCode":"IPL 24/25  MI vs  KKR",
+      "token Address":"0x64b08Bdbafa6F19CE1c11bE2b8AB7aB7447Ff125",
       "league":"IPL 24/25",
       "teamA":{
           "name":"Mumbai Indians",
@@ -13,11 +14,11 @@
           "img":"",
           "symbol":"KKR"
       },
-      "saleStart":"22/12/2024 (23:10:15)",
-      "saleEnds":"25/12/2024  (16:45:55)"
+      "saleEnds":"28/12/2024  (16:45:55)"
     },
     {
       "eventCode":"IPL 24/25  RCB v. CSK",
+      "token Address":"0x7629D9Aa9839687C3c0Ef7f4F2AbFcbA39b01cF2",
       "league":"IPL 24/25",
       "teamA":{
           "name":"Royal Challengers Banglore",
@@ -29,8 +30,8 @@
           "img":"",
           "symbol":"CSK"
       },
-      "saleStart":"23/12/2024 (18:35:26)",
-      "saleEnds":"25/12/2024  (18:35:26 )"
+      
+      "saleEnds":"28/12/2024  (18:35:26 )"
     }
   
   ]

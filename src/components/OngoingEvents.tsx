@@ -97,29 +97,48 @@ const OngoingEvents: React.FC = () => {
     if (selectedWinner && amount && tokenContract && userTokenAddress) {
       try {
         // Convert amount to Wei (assuming 18 decimals)
-        const amountInWei = ethers.parseUnits(amount, 18); // amountInWei is now a BigNumber
-        
+        const amountInWei = ethers.parseUnits(amount, 18);  // Convert amount to BigNumber in Wei
+
         // Ensure the balance is a BigNumber
         const balance = await tokenContract.balanceOf(userTokenAddress);
         
-        // Compare the balance using BigNumber's lt() method
-        if (balance.lt(amountInWei)) {
+        // Check if the balance is valid
+        if (!balance) {
+          alert('Failed to fetch balance.');
+          return;
+        }
+
+        // If balance is returned as a string, convert it to BigNumber
+        let balanceInBigNumber;
+        if (typeof balance === 'string') {
+          balanceInBigNumber = ethers.parseUnits(balance, 18);  // Use parseUnits to convert string to BigNumber
+        } else if (ethers.BigNumber.isBigNumber(balance)) {
+          balanceInBigNumber = balance;  // If already a BigNumber, use it directly
+        } else {
+          alert('Unknown balance format');
+          return;
+        }
+
+        console.log('Balance:', balanceInBigNumber.toString());  // Log balance to check its value
+
+        // Compare the balance using BigNumber's comparison methods
+        if (balanceInBigNumber.lt(amountInWei)) {
           alert("Insufficient balance in the provided token address.");
           return;
         }
-  
+
         // Map selected winner (team name) to Ethereum address
         const winnerAddress = teamAddressMap[selectedWinner];
         if (!winnerAddress) {
           alert("Invalid winner selected.");
           return;
         }
-  
+
         // Call transferFrom method to transfer tokens from the user address
         const tx = await tokenContract.transferFrom(userTokenAddress, winnerAddress, amountInWei);
-    
+        
         await tx.wait();  // Wait for the transaction to be mined
-    
+
         alert(`Transaction successful! You selected ${selectedWinner} with a wager of ${amount}`);
       } catch (error) {
         console.error('Error making transaction:', error);
@@ -129,7 +148,6 @@ const OngoingEvents: React.FC = () => {
       alert('Please select a winner, enter a valid amount, and ensure contract is initialized.');
     }
   };
-  
 
   return (
     <div className="text-white ml-[105px] flex gap-x-5 mt-8">
@@ -148,8 +166,8 @@ const OngoingEvents: React.FC = () => {
               {items.teamB.symbol}
             </div>
           </div>
-          <p className="text-[20px] font-sans pl-4 mt-4">League Starts at {items.saleStart}</p>
-          <p className="text-[20px] font-sans pl-4 mt-4">League Ends at {items.saleEnds}</p>
+          
+          <p className="text-[20px] font-sans pl-4 mt-4">League End at {items.saleEnds}</p>
           <button
             className="border border-green-300 mb-4 rounded-lg bg-[#825779] transition-all duration-500 hover:bg-green-500 px-6 text-[20px] flex justify-center mx-auto mt-4"
             onClick={() => openModal(items)}
