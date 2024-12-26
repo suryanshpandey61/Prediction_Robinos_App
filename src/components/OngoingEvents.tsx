@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import eventData from "../../events.json";
-import { ethers } from 'ethers';  // Import ethers
+import { ethers } from 'ethers';
 
 interface Team {
   name: string;
@@ -13,7 +13,7 @@ interface Event {
   league: string;
   teamA: Team;
   teamB: Team;
-  saleStart: string;
+  tokenAddress: string;
   saleEnds: string;
 }
 
@@ -23,29 +23,33 @@ const OngoingEvents: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedWinner, setSelectedWinner] = useState<string | null>(null);
   const [amount, setAmount] = useState<string>(''); 
-  const [tokenAddress, setTokenAddress] = useState<string>('');  // State for token address input by the user
-  const [userTokenAddress, setUserTokenAddress] = useState<string>(''); // Token address entered by user to deduct from
-
   const [tokenContract, setTokenContract] = useState<any | null>(null);  // State for token contract
+  const [balance, setBalance] = useState<string>('0');  // User token balance
 
   useEffect(() => {
     setData(eventData);
 
     // Function to initialize the contract asynchronously
     const initializeContract = async () => {
-      if (window.ethereum && userTokenAddress) {
+      if (window.ethereum && selectedEvent) {
         try {
           // Initialize provider and signer
           const provider = new ethers.BrowserProvider(window.ethereum);
-          const signer = await provider.getSigner();  // 'await' now inside an async function
-          const tokenABI = [
+          const signer = await provider.getSigner(); 
+          
+          const contract = new ethers.Contract(selectedEvent.tokenAddress, [
             'function transfer(address to, uint amount) public returns (bool)',
             'function transferFrom(address from, address to, uint amount) public returns (bool)',
-            'function balanceOf(address owner) public view returns (uint256)'
-          ];
+            'function balanceOf(address owner) public view returns (uint256)',
+          ], signer); 
           
-          const contract = new ethers.Contract(userTokenAddress, tokenABI, signer); // Correct contract initialization
           setTokenContract(contract);
+          
+          // Fetch the user's token balance
+          const userAddress = await signer.getAddress();
+          const userBalance = await contract.balanceOf(userAddress);
+          setBalance(ethers.formatUnits(userBalance, 18));  // Assuming 18 decimals
+          
         } catch (error) {
           console.error("Error initializing contract:", error);
           alert("Failed to initialize the contract.");
@@ -55,18 +59,16 @@ const OngoingEvents: React.FC = () => {
       }
     };
 
-    if (userTokenAddress) {
-      initializeContract(); // Call async function only if token address is set
+    if (selectedEvent) {
+      initializeContract();  // Initialize contract and fetch balance when event is selected
     }
-
-  }, [userTokenAddress]);  // Dependency on userTokenAddress to initialize contract when it's updated
+  }, [selectedEvent]);  // Dependency on selectedEvent to initialize contract and fetch balance
 
   const openModal = (event: Event) => {
     setSelectedEvent(event);
     setIsModalOpen(true);
     setSelectedWinner(null); 
     setAmount('');
-    setUserTokenAddress('');  // Reset token address input when opening modal
   };
 
   const closeModal = () => {
@@ -74,7 +76,6 @@ const OngoingEvents: React.FC = () => {
     setSelectedEvent(null);
     setSelectedWinner(null);
     setAmount('');
-    setUserTokenAddress('');
   };
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,35 +95,14 @@ const OngoingEvents: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    if (selectedWinner && amount && tokenContract && userTokenAddress) {
+    if (selectedWinner && amount && tokenContract) {
       try {
-        // Convert amount to Wei (assuming 18 decimals)
         const amountInWei = ethers.parseUnits(amount, 18);  // Convert amount to BigNumber in Wei
-
-        // Ensure the balance is a BigNumber
-        const balance = await tokenContract.balanceOf(userTokenAddress);
+        const userAddress = await tokenContract.signer.getAddress();
         
-        // Check if the balance is valid
-        if (!balance) {
-          alert('Failed to fetch balance.');
-          return;
-        }
+        const balanceInWei = ethers.parseUnits(balance, 18);  // User balance in Wei
 
-        // If balance is returned as a string, convert it to BigNumber
-        let balanceInBigNumber;
-        if (typeof balance === 'string') {
-          balanceInBigNumber = ethers.parseUnits(balance, 18);  // Use parseUnits to convert string to BigNumber
-        } else if (ethers.BigNumber.isBigNumber(balance)) {
-          balanceInBigNumber = balance;  // If already a BigNumber, use it directly
-        } else {
-          alert('Unknown balance format');
-          return;
-        }
-
-        console.log('Balance:', balanceInBigNumber.toString());  // Log balance to check its value
-
-        // Compare the balance using BigNumber's comparison methods
-        if (balanceInBigNumber.lt(amountInWei)) {
+        if (balanceInWei.lt(amountInWei)) {
           alert("Insufficient balance in the provided token address.");
           return;
         }
@@ -135,8 +115,7 @@ const OngoingEvents: React.FC = () => {
         }
 
         // Call transferFrom method to transfer tokens from the user address
-        const tx = await tokenContract.transferFrom(userTokenAddress, winnerAddress, amountInWei);
-        
+        const tx = await tokenContract.transferFrom(userAddress, winnerAddress, amountInWei);
         await tx.wait();  // Wait for the transaction to be mined
 
         alert(`Transaction successful! You selected ${selectedWinner} with a wager of ${amount}`);
@@ -185,7 +164,6 @@ const OngoingEvents: React.FC = () => {
             <h1 className='text-white font-semibold text-xl mb-3'>Select Winner </h1> 
             {/* Team Cards for Winner Selection */}
             <div className="flex justify-between mb-4">
-            
               <div
                 className={`w-[250px] p-4 text-center rounded-lg cursor-pointer border-2 ${selectedWinner === selectedEvent.teamA.name ? 'border-green-500' : 'border-gray-300'} transition-all hover:border-green-500`}
                 onClick={() => handleWinnerChange(selectedEvent.teamA.name)}
@@ -229,19 +207,11 @@ const OngoingEvents: React.FC = () => {
               </div>
             )}
 
-            {/* Add token address input */}
-            {selectedWinner && (
-              <div className="mb-4">
-                <p className="text-white text-xl mb-2">Enter Token Address</p>
-                <input
-                  type="text"
-                  value={userTokenAddress}
-                  onChange={(e) => setUserTokenAddress(e.target.value)}
-                  className="w-full p-2 rounded-lg border-2 border-pink-300 text-black"
-                  placeholder="Token Address"
-                />
-              </div>
-            )}
+            {/* Display Token Balance */}
+            <div className="mb-4">
+              <p className="text-white text-xl mb-2">Your Token Balance</p>
+              <p className="text-white">{balance} Tokens</p>
+            </div>
 
             <div className="flex justify-between gap-5">
               <button

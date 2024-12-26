@@ -2,7 +2,7 @@
 [
     {
       "eventCode":"IPL 24/25  MI vs  KKR",
-      "token Address":"0x64b08Bdbafa6F19CE1c11bE2b8AB7aB7447Ff125",
+      "tokenAddress":"0x64b08Bdbafa6F19CE1c11bE2b8AB7aB7447Ff125",
       "league":"IPL 24/25",
       "teamA":{
           "name":"Mumbai Indians",
