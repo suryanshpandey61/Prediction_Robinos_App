@@ -13,119 +13,124 @@ interface Event {
   league: string;
   teamA: Team;
   teamB: Team;
-  tokenAddress: string;
+  tokenAddress?: string;
   saleEnds: string;
 }
 
 const OngoingEvents: React.FC = () => {
-  const [data, setData] = useState<Event[]>([]);
+  const [data, setData] = useState<Event[]>([]); // List of ongoing events
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedWinner, setSelectedWinner] = useState<string | null>(null);
-  const [amount, setAmount] = useState<string>(''); 
+  const [selectedTeam, setSelectedTeam] = useState<string | null>(null); // For team selection (A or B)
+  const [amount, setAmount] = useState<string>(''); // Amount to bid
   const [tokenContract, setTokenContract] = useState<any | null>(null);  // State for token contract
   const [balance, setBalance] = useState<string>('0');  // User token balance
+  const [signer, setSigner] = useState<any | null>(null);  // State for the signer
 
   useEffect(() => {
     setData(eventData);
 
     // Function to initialize the contract asynchronously
     const initializeContract = async () => {
-      if (window.ethereum && selectedEvent) {
+      if (window.ethereum && selectedEvent && selectedEvent.tokenAddress) {
         try {
           // Initialize provider and signer
           const provider = new ethers.BrowserProvider(window.ethereum);
-          const signer = await provider.getSigner(); 
-          
+          const userSigner = await provider.getSigner();
+          if (!userSigner) {
+            alert('No signer found. Make sure your wallet is connected.');
+            return;
+          }
+
+          setSigner(userSigner); // Store signer in state
+
+          // Initialize contract only if tokenAddress is available
           const contract = new ethers.Contract(selectedEvent.tokenAddress, [
             'function transfer(address to, uint amount) public returns (bool)',
-            'function transferFrom(address from, address to, uint amount) public returns (bool)',
             'function balanceOf(address owner) public view returns (uint256)',
-          ], signer); 
-          
+          ], userSigner);
+
           setTokenContract(contract);
           
           // Fetch the user's token balance
-          const userAddress = await signer.getAddress();
+          const userAddress = await userSigner.getAddress();
           const userBalance = await contract.balanceOf(userAddress);
           setBalance(ethers.formatUnits(userBalance, 18));  // Assuming 18 decimals
-          
+
         } catch (error) {
           console.error("Error initializing contract:", error);
-          alert("Failed to initialize the contract.");
+          alert("Failed to initialize the contract. Please check if MetaMask is connected.");
         }
       } else {
-        alert('Please install MetaMask or an Ethereum-compatible browser wallet.');
+        alert('Token address is missing or MetaMask is not available.');
       }
     };
 
     if (selectedEvent) {
-      initializeContract();  // Initialize contract and fetch balance when event is selected
+      initializeContract();
     }
-  }, [selectedEvent]);  // Dependency on selectedEvent to initialize contract and fetch balance
-
-  const openModal = (event: Event) => {
-    setSelectedEvent(event);
-    setIsModalOpen(true);
-    setSelectedWinner(null); 
-    setAmount('');
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedEvent(null);
-    setSelectedWinner(null);
-    setAmount('');
-  };
-
-  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (parseFloat(value) >= 0 || value === "") {
-      setAmount(value);
-    }
-  };
-
-  const handleWinnerChange = (winner: string) => {
-    setSelectedWinner(winner);
-  };
-
-  const teamAddressMap: { [key: string]: string } = {
-    "Team A": "0xAddressForTeamA",  // Replace with actual Ethereum address
-    "Team B": "0xAddressForTeamB",  // Replace with actual Ethereum address
-  };
+  }, [selectedEvent]); // Dependency on selectedEvent to initialize contract and fetch balance
 
   const handleSubmit = async () => {
-    if (selectedWinner && amount && tokenContract) {
+    if (selectedTeam && amount && tokenContract && signer) {
       try {
         const amountInWei = ethers.parseUnits(amount, 18);  // Convert amount to BigNumber in Wei
-        const userAddress = await tokenContract.signer.getAddress();
-        
-        const balanceInWei = ethers.parseUnits(balance, 18);  // User balance in Wei
+        const userAddress = await signer.getAddress();  // Get the user's address from the signer
 
-        if (balanceInWei.lt(amountInWei)) {
+        // Fetch the user's current token balance
+        const userBalance = await tokenContract.balanceOf(userAddress);
+        const userBalanceInWei = ethers.formatUnits(userBalance, 18);  // Convert balance to decimal format
+
+        // Check if the user has enough balance
+        if (parseFloat(userBalanceInWei) < parseFloat(amount)) {
           alert("Insufficient balance in the provided token address.");
           return;
         }
 
-        // Map selected winner (team name) to Ethereum address
-        const winnerAddress = teamAddressMap[selectedWinner];
-        if (!winnerAddress) {
-          alert("Invalid winner selected.");
-          return;
-        }
+        // Deduct the amount from the user's balance
+        const tx = await tokenContract.transfer(userAddress, amountInWei); // Deduct tokens (if required by your contract)
 
-        // Call transferFrom method to transfer tokens from the user address
-        const tx = await tokenContract.transferFrom(userAddress, winnerAddress, amountInWei);
-        await tx.wait();  // Wait for the transaction to be mined
+        // Wait for the transaction to be mined
+        await tx.wait();
 
-        alert(`Transaction successful! You selected ${selectedWinner} with a wager of ${amount}`);
+        // After the transaction is successful, update the user's token balance
+        const updatedBalance = await tokenContract.balanceOf(userAddress);
+        setBalance(ethers.formatUnits(updatedBalance, 18));  // Update the balance in the UI
+
+        // Show success message
+        alert(`Bid of ${amount} tokens placed on ${selectedTeam}!`);
+        
+        // Close the modal after success
+        closeModal();
       } catch (error) {
         console.error('Error making transaction:', error);
-        alert('Failed to submit wager.');
+        alert('Failed to place bid.');
       }
     } else {
-      alert('Please select a winner, enter a valid amount, and ensure contract is initialized.');
+      alert('Please select a team and enter a valid amount.');
     }
+  };
+
+  // Open the modal and set the selected event
+  const openModal = (event: Event) => {
+    setSelectedEvent(event);
+    setIsModalOpen(true);
+  };
+
+  // Close the modal
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedEvent(null);  // Reset selected event when closing the modal
+  };
+
+  // Handle team selection for bidding
+  const handleTeamChange = (team: string) => {
+    setSelectedTeam(team);
+  };
+
+  // Handle amount input change
+  const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAmount(event.target.value);
   };
 
   return (
@@ -160,21 +165,22 @@ const OngoingEvents: React.FC = () => {
       {isModalOpen && selectedEvent && (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-[#2D2F6F] p-8 w-[600px] rounded-lg">
-            <h2 className="text-white text-2xl font-bold mb-4">Prize Pool Information</h2>
-            <h1 className='text-white font-semibold text-xl mb-3'>Select Winner </h1> 
-            {/* Team Cards for Winner Selection */}
+            <h2 className="text-white text-2xl font-bold mb-4">Bid on a Team</h2>
+            <h1 className='text-white font-semibold text-xl mb-3'>Select Team</h1> 
+            
+            {/* Team Cards for Bid Selection */}
             <div className="flex justify-between mb-4">
               <div
-                className={`w-[250px] p-4 text-center rounded-lg cursor-pointer border-2 ${selectedWinner === selectedEvent.teamA.name ? 'border-green-500' : 'border-gray-300'} transition-all hover:border-green-500`}
-                onClick={() => handleWinnerChange(selectedEvent.teamA.name)}
+                className={`w-[250px] p-4 text-center rounded-lg cursor-pointer border-2 ${selectedTeam === selectedEvent.teamA.name ? 'border-green-500' : 'border-gray-300'} transition-all hover:border-green-500`}
+                onClick={() => handleTeamChange(selectedEvent.teamA.name)}
               >
                 <div className="text-4xl">{selectedEvent.teamA.symbol}</div>
                 <p className="text-white mt-2">{selectedEvent.teamA.name}</p>
               </div>
 
               <div
-                className={`w-[250px] p-4 text-center rounded-lg cursor-pointer border-2 ${selectedWinner === selectedEvent.teamB.name ? 'border-green-500' : 'border-gray-300'} transition-all hover:border-green-500`}
-                onClick={() => handleWinnerChange(selectedEvent.teamB.name)}
+                className={`w-[250px] p-4 text-center rounded-lg cursor-pointer border-2 ${selectedTeam === selectedEvent.teamB.name ? 'border-green-500' : 'border-gray-300'} transition-all hover:border-green-500`}
+                onClick={() => handleTeamChange(selectedEvent.teamB.name)}
               >
                 <div className="text-4xl">{selectedEvent.teamB.symbol}</div>
                 <p className="text-white mt-2">{selectedEvent.teamB.name}</p>
@@ -182,19 +188,19 @@ const OngoingEvents: React.FC = () => {
             </div>
 
             {/* Preview Card (Selected Team) */}
-            {selectedWinner && (
+            {selectedTeam && (
               <div className="mt-4 bg-[#453982] p-4 rounded-lg flex justify-between items-center">
                 <div className="text-3xl">
-                  {selectedWinner === selectedEvent.teamA.name ? selectedEvent.teamA.symbol : selectedEvent.teamB.symbol}
+                  {selectedTeam === selectedEvent.teamA.name ? selectedEvent.teamA.symbol : selectedEvent.teamB.symbol}
                 </div>
                 <p className="text-white text-xl">
-                  {selectedWinner} <span className="text-green-500">✔</span>
+                  {selectedTeam} <span className="text-green-500">✔</span>
                 </p>
               </div>
             )}
 
-            {/* Show Amount Input only if a winner is selected */}
-            {selectedWinner && (
+            {/* Show Amount Input only if a team is selected */}
+            {selectedTeam && (
               <div className="mb-4">
                 <p className="text-white text-xl mb-2">Enter Amount</p>
                 <input
