@@ -202,7 +202,7 @@ const OngoingEvents: React.FC = () => {
             {/* Show Amount Input only if a team is selected */}
             {selectedTeam && (
               <div className="mb-4">
-                <p className="text-white text-xl mb-2">Enter your  Amount</p>
+                <p className="text-white text-xl mb-2">Enter  Amount for Bid </p>
                 <input
                   type="number"
                   value={amount}
