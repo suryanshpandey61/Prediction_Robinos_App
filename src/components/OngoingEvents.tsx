@@ -8,6 +8,7 @@ interface Team {
   name: string;
   img: string;
   symbol: string;
+  image:string;
 }
 
 interface Event {
@@ -138,11 +139,11 @@ const OngoingEvents: React.FC = () => {
   return (
     <div className="text-white ml-[105px] flex gap-x-5 mt-8">
       {data.map((items, index) => (
-        <div key={index} className="bg-[#2D2F6F] w-[300px] border border-pink-400 rounded-lg">
+        <div key={index} className="bg-[#2D2F6F] w-[300px] border border-pink-200 rounded-lg">
           <div className='flex justify-between  items-center'>
           <div className="flex flex-col gap-x-2 font-serif mt-5">
           <p className="text-slate-400  font-bold pl-4">{items.league}</p>
-           <div className='flex gap-x-1 items-center '> 
+           <div className='flex gap-x-1 items-center pl-4 text-[20px] '> 
              <p className=''> {items.teamA.name}</p> v.
              <p>{items.teamB.name}</p>
            </div>
@@ -154,12 +155,14 @@ const OngoingEvents: React.FC = () => {
           className='pr-2 w-[50px]'/>
           </div>
          
-          <div className="flex gap-x-4 pl-4 mt-4">
-            <div className="bg-[#453982] w-[180px] flex justify-center text-[50px] border border-pink-200 rounded-lg">
+          <div className="flex p-4 gap-x-4 mt-4">
+            <div className="bg-[#453982] p-4 flex-col w-[150px] flex justify-center text-[50px] border border-pink-200 rounded-lg">
               {items.teamA.symbol}
+              <img src={items.teamA.image} alt={`${items.teamA} Image`}/>
             </div>
-            <div className="bg-[#453982] w-[180px] text-[50px] flex justify-center border border-pink-200 rounded-lg">
+            <div className="bg-[#453982] p-4 flex-col w-[150px] text-[50px] flex justify-center border border-pink-200 rounded-lg">
               {items.teamB.symbol}
+              <img src={items.teamB.image} alt={`${items.teamB} Image`}/>
             </div>
           </div>
           
