@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import eventData from "../../events.json";
 import { ethers } from 'ethers';
+import RobinoLogo from "../assets/token_40px.png"
+import Image from "next/image";
 
 interface Team {
   name: string;
@@ -136,12 +138,22 @@ const OngoingEvents: React.FC = () => {
   return (
     <div className="text-white ml-[105px] flex gap-x-5 mt-8">
       {data.map((items, index) => (
-        <div key={index} className="bg-[#2D2F6F] w-[500px] border border-pink-400 rounded-lg">
-          <p className="text-slate-400 font-bold pl-4">{items.league}</p>
-          <div className="flex gap-x-2 text-[20px] pl-4 font-serif mt-5">
-            <p>{items.teamA.name}</p> v.
-            <p>{items.teamB.name}</p>
+        <div key={index} className="bg-[#2D2F6F] w-[300px] border border-pink-400 rounded-lg">
+          <div className='flex justify-between  items-center'>
+          <div className="flex flex-col gap-x-2 font-serif mt-5">
+          <p className="text-slate-400  font-bold pl-4">{items.league}</p>
+           <div className='flex gap-x-1 items-center '> 
+             <p className=''> {items.teamA.name}</p> v.
+             <p>{items.teamB.name}</p>
+           </div>
           </div>
+        
+          <Image 
+          src={RobinoLogo}
+          alt="" 
+          className='pr-2 w-[50px]'/>
+          </div>
+         
           <div className="flex gap-x-4 pl-4 mt-4">
             <div className="bg-[#453982] w-[180px] flex justify-center text-[50px] border border-pink-200 rounded-lg">
               {items.teamA.symbol}
