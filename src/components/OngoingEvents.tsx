@@ -139,7 +139,7 @@ const OngoingEvents: React.FC = () => {
   return (
     <div className="text-white ml-[105px] flex gap-x-5 mt-8">
       {data.map((items, index) => (
-        <div key={index} className="bg-[#2D2F6F] w-[300px] border border-pink-200 rounded-lg">
+        <div key={index} className="bg-[#2D2F6F] w-[320px] border border-pink-200 rounded-lg">
           <div className='flex justify-between  items-center'>
           <div className="flex flex-col gap-x-2 font-serif mt-5">
           <p className="text-slate-400  font-bold pl-4">{items.league}</p>
@@ -156,13 +156,21 @@ const OngoingEvents: React.FC = () => {
           </div>
          
           <div className="flex p-4 gap-x-4 mt-4">
-            <div className="bg-[#453982] p-4 flex-col w-[150px] flex justify-center text-[50px] border border-pink-200 rounded-lg">
-              {items.teamA.symbol}
-              <img src={items.teamA.image} alt={`${items.teamA} Image`}/>
+            <div className="bg-[#453982] items-center p-4 flex-col w-[180px] gap-y-4 flex justify-center  border border-pink-200 rounded-lg">
+              <p className='text-[20px] font-semibold'>   {items.teamA.symbol} <span className='text-green-400'>+0.5</span></p>
+              <img src={items.teamA.image} alt={`${items.teamA} Image`} className='object-cover w-[80px] rounded-xl'/>
+              <div className='flex  flex-col ml-[-70px]'>
+              <p className='text-slate-400 font-bold'>ROI</p>
+              <p className='text-[20px]'>1.90</p>
+              </div>
             </div>
-            <div className="bg-[#453982] p-4 flex-col w-[150px] text-[50px] flex justify-center border border-pink-200 rounded-lg">
-              {items.teamB.symbol}
-              <img src={items.teamB.image} alt={`${items.teamB} Image`}/>
+            <div className="bg-[#453982] p-4 flex-col w-[180px] items-center  flex justify-center gap-y-4 border border-pink-200 rounded-lg">
+              <p className='text-[20px] font-semibold'>{items.teamB.symbol} <span className='text-red-600'>-0.5</span></p>
+              <img src={items.teamB.image} alt={`${items.teamB} Image`} className='object-cover w-[80px] flex justify-center rounded-xl'/>
+              <div className='flex  flex-col ml-[-50px] '>
+              <p className='text-slate-400 font-bold'>ROI</p>
+              <p className='text-[20px]'>1.90</p>
+              </div>
             </div>
           </div>
           
