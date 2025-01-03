@@ -6,7 +6,7 @@ import Navbar from '@/components/navbar';
 import OngoingEvents from '@/components/OngoingEvents';
 
 const Index: React.FC = () => {
-  return <div className='h-[100vh] flex bg-gradient' >
+  return <div className=' flex bg-gradient' >
     
 
 <div className=''><Sidebar/></div>
