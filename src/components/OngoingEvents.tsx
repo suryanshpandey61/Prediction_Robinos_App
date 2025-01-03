@@ -152,7 +152,7 @@ const OngoingEvents: React.FC = () => {
           <Image 
           src={RobinoLogo}
           alt="" 
-          className='pr-2 w-[50px]'/>
+          className='pr-2 w-[48px]'/>
           </div>
          
           <div className="flex p-4 gap-x-4 mt-4">
