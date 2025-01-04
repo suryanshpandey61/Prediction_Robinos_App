@@ -137,7 +137,7 @@ const OngoingEvents: React.FC = () => {
   };
 
   return (
-    <div className="text-white ml-[105px] flex gap-x-5 mt-8 pb-8">
+    <div className="text-white ml-[100px] flex gap-x-5 mt-8 pb-8">
       {data.map((items, index) => (
         <div key={index} className="bg-[#2D2F6F] w-[320px] border border-pink-200 rounded-lg">
           <div className='flex justify-between  items-center'>
