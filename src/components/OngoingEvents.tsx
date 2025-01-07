@@ -198,7 +198,19 @@ const OngoingEvents: React.FC = () => {
             <Slider />
           </div>
 
-         
+          <div className="pl-4 cursor-pointer mt-4" onClick={()=>openModal(items)}>
+          <div className="flex justify-between  rounded-lg bg-[#061230] w-[280px] pl-4  items-center">
+            <div className="flex flex-col gap-x-2  py-[6px]">
+              <p className="text-slate-400  items-center flex font-bold ">Prize Pool</p>
+              <div className="flex gap-x-1 items-center text-[20px] ">
+                <p className="font-bold flex items-center">40.0K RBN</p>
+               
+              </div>
+            </div> <Image src={RobinoLogo} alt="" className="pr-2 w-[48px]" />
+          </div>
+
+           
+          </div>
           {/* <button
             className="border border-green-300 mb-4 rounded-lg bg-[#825779] transition-all duration-500 hover:bg-green-500 px-6 text-[20px] flex justify-center mx-auto mt-4"
             onClick={() => openModal(items)}
