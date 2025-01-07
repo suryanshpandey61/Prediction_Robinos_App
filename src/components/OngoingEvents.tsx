@@ -219,7 +219,9 @@ const OngoingEvents: React.FC = () => {
           </button> */}
           <div className="h-[1px] ml-[14px] mt-4 w-[285px] bg-slate-400"></div>
          <div className="flex w-[300px] pl-4 justify-between items-center mt-4 mb-4">
-        
+         <p className="text-[16px] ">
+            Sale End at <span className="font-semibold"> {items.saleEnds}</span> 
+          </p><SlCalender />
 
          </div>
         </div>
