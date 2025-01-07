@@ -4,6 +4,7 @@ import { ethers } from "ethers";
 import RobinoLogo from "../assets/token_40px.png";
 import Image from "next/image";
 import Slider from "./Slider";
+import { SlCalender } from "react-icons/sl";
 
 interface Team {
   name: string;
@@ -217,11 +218,9 @@ const OngoingEvents: React.FC = () => {
             Prize Pool
           </button> */}
           <div className="h-[1px] ml-[14px] mt-4 w-[285px] bg-slate-400"></div>
-         <div>
-         <p className="text-[16px] font-sans pl-4 mt-4">
-            Sale End at {items.saleEnds}
-          </p>
-          
+         <div className="flex w-[300px] pl-4 justify-between items-center mt-4 mb-4">
+        
+
          </div>
         </div>
       ))}
