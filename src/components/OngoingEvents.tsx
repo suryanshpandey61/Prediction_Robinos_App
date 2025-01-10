@@ -203,7 +203,7 @@ const OngoingEvents: React.FC = () => {
             <div className="flex flex-col gap-x-2  py-[6px]">
               <p className="text-slate-400  items-center flex font-bold ">Prize Pool</p>
               <div className="flex gap-x-1 items-center text-[20px] ">
-                <p className="font-bold flex items-center">40.0K </p>
+                <p className="font-bold flex items-center">40.0K RBN </p>
                
               </div>
             </div> <Image src={RobinoLogo} alt="" className="pr-2 w-[48px]" />
