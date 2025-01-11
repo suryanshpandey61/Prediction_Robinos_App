@@ -6,7 +6,7 @@ import { FaWallet } from "react-icons/fa";
 
 function sidebar() {
   return (
-    <div className="w-[350px] h-[100vh] pt-[20px] pl-[20px] space-y-[px] bg-[#061230] text-white">
+    <div className="w-[300px] h-[100vh] pt-[20px] pl-[20px] space-y-[px] bg-[#061230] text-white">
       <div className=" h-[110px] ">
         <a href="">
           <Image
@@ -22,7 +22,7 @@ function sidebar() {
         </a>
       </div>
       <ul className="text-slate-500 text-[18px] font-medium">
-        <li className="mb-[40px] ">
+        <li className="mb-[40px] hover:text-blue-600 ">
           <Link
             href="/"
             className="hover:text-blue-600 "
@@ -41,7 +41,7 @@ function sidebar() {
             Versus
           </Link>
         </li>
-        <li className="mb-[40px] ">
+        <li className="mb-[40px]  ">
           <a
             href="/tokenized"
             aria-label="Tokenized events"
@@ -61,13 +61,13 @@ function sidebar() {
             <p className="text-xs absolute right-0 ">(coming soon)</p>
           </a>
         </li>
-        <li className="mb-[40px] flex ">
+        <li className="mb-[40px]  ">
           <Link href="/Portfolio" passHref>
             
-              <FaWallet /> Portfolio
+             <p className="flex items-center hover:text-blue-600 gap-x-4"> <FaWallet /> Portfolio</p>
             
           </Link>
-        </li>
+        </li>   
         <li className="mb-[40px]">
           <a
             href="/minoNFT"
