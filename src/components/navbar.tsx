@@ -157,7 +157,7 @@ function Navbar() {
           className="rounded-[10px] font-medium text-[16px] px-[28px] relative bg-blue-600 hover:bg-blue-400 transition cursor-pointer"
           onClick={toggleModal}
         >
-          <div className="flex items-center justify-center h-[50px]">
+          <div className="flex items-center justify-center h-[55px]">
             <span>
               {account
                 ? `Connected: ${account.slice(0, 6)}...`
