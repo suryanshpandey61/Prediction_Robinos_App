@@ -62,7 +62,7 @@ function sidebar() {
           </a>
         </li>
         <li className="mb-[40px]  ">
-          <Link href="/Portfolio" passHref>
+          <Link href="/Portfolio">
             
              <p className="flex items-center hover:text-blue-600 gap-x-4"> <FaWallet /> Portfolio</p>
             
