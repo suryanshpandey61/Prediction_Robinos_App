@@ -106,34 +106,34 @@ const Portfolio: React.FC = () => {
                 </div>
               </div>
             </div>
-            <div className="flex justify-between   rounded-lg bg-[#061230] w-[250px] pl-4 mr-2  mt-2 mb-4  items-center">
-              <div className="flex  gap-x-2  py-[6px]">
+            <div className="flex justify-between   rounded-lg bg-[#061230] w-[270px] pl-4 mr-2  mt-2 mb-4  items-center">
+              <div className="flex   py-[6px]">
                 <div className="flex flex-col  items-center text-[14px] ">
                   <p className=" text-slate-500 flex items-center">
                     Total Stake
                   </p>
-                  <p className="text-white  items-center">0 USDM</p>
+                  <p className="text-white  items-center">0 {token}</p>
                 </div>
-                <div className="dropdown">
+                <div className="dropdown ml-[50px]">
                   {/* Button to trigger dropdown */}
            
 
                   {/* Dropdown menu */}
-                  <div className="flex items-center h-[50px] p-[2px] relative">
+            <div className="flex items-center h-[50px] p-[2px] relative">
             <button
               type="button"
-              className="group h-full items-center rounded-[10px] bg-slate-900 border-2 border-blue-500 placeholder:text-white text-white outline-none disabled:cursor-not-allowed disabled:opacity-50 [&amp;>span]:line-clamp-1 z-50 flex rounded-r-[10px] px-[15px] min-w-52 justify-center border-none"
+              className="group h-full items-center rounded-[10px] bg-slate-900 border border-slate-500  placeholder:text-white text-white  disabled:cursor-not-allowed disabled:opacity-50 [&amp;>span]:line-clamp-1 z-50 flex rounded-r-[10px] px-[15px] justify-center "
               onClick={toggleDropdown}
             >
-              <span>{token}</span>
+              <span>{token}🔽</span>
             </button>
 
             {dropdownVisible && (
-              <div className="absolute top-[55px] left-2 bg-slate-700 text-white rounded-lg shadow-lg w-[100px] z-50">
+              <div className="absolute top-[55px] text-[20px] left-2 bg-[#061230] text-white rounded-lg shadow-lg w-[100px] z-50">
                 {tokens.map((net) => (
                   <div
                     key={net}
-                    className="px-6 py-2 hover:bg-blue-600 rounded-xl cursor-pointer"
+                    className="px-6 py-2 hover:bg-white hover:text-black rounded-xl  cursor-pointer"
                     onClick={() => handleNetworkChange(net)}
                   >
                     {net}
