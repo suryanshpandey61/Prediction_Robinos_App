@@ -96,7 +96,7 @@ const Portfolio: React.FC = () => {
               </div>
             </div>
             <div className="flex justify-between   rounded-lg bg-[#061230] w-[250px] pl-4 mt-2 mb-4  items-center">
-              <div className="flex flex-col gap-x-2  py-[6px]">
+              <div className="flex flex-col gap-x-2  py-[7px]">
                 <p className=" text-slate-500 flex items-center">
                   Total Winnings
                 </p>
