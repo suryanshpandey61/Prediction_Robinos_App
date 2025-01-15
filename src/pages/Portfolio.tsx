@@ -110,7 +110,7 @@ const Portfolio: React.FC = () => {
               <div className="flex   py-[6px]">
                 <div className="flex flex-col  items-center text-[14px] ">
                   <p className=" text-slate-500 flex items-center">
-                    Total Stake
+                    Total Staked
                   </p>
                   <p className="text-white  items-center">0 {token}</p>
                 </div>
