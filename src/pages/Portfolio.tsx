@@ -110,7 +110,7 @@ const Portfolio: React.FC = () => {
               <div className="flex   py-[6px]">
                 <div className="flex flex-col  items-center text-[14px] ">
                   <p className=" text-slate-500 flex items-center">
-                    Total Stake
+                    Total Staked
                   </p>
                   <p className="text-white  items-center">0 {token}</p>
                 </div>
@@ -125,7 +125,7 @@ const Portfolio: React.FC = () => {
               className="group h-full items-center rounded-[10px] bg-slate-900 border border-slate-500  placeholder:text-white text-white  disabled:cursor-not-allowed disabled:opacity-50 [&amp;>span]:line-clamp-1 z-50 flex rounded-r-[10px] px-[15px] justify-center "
               onClick={toggleDropdown}
             >
-              <span>{token}🔽</span>
+              <span>{token} ▼</span>
             </button>
 
             {dropdownVisible && (
