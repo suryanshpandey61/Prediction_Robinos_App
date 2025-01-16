@@ -118,7 +118,7 @@ const Portfolio: React.FC = () => {
                   {/* Button to trigger dropdown */}
            
 
-                  {/* Dropdown menu */}
+                  
             <div className="flex items-center h-[50px] p-[2px] relative">
             <button
               type="button"
