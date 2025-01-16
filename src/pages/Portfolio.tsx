@@ -9,10 +9,9 @@ import { FaFlag } from "react-icons/fa6";
 import React, { useState } from "react";
 
 const Portfolio: React.FC = () => {
-  
   const [token, setToken] = useState<string>("Token");
-  const tokens=["USDM","RBN"];
-   const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
+  const tokens = ["USDM", "RBN"];
+  const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
 
   // Toggle dropdown menu visibility
   const handleNetworkChange = (newToken: string): void => {
@@ -115,33 +114,29 @@ const Portfolio: React.FC = () => {
                   <p className="text-white  items-center">0 {token}</p>
                 </div>
                 <div className="dropdown ml-[50px]">
-                  {/* Button to trigger dropdown */}
-           
+                  <div className="flex items-center h-[50px] p-[2px] relative">
+                    <button
+                      type="button"
+                      className="group h-full items-center rounded-[10px] bg-slate-900 border border-slate-500  placeholder:text-white text-white  disabled:cursor-not-allowed disabled:opacity-50 [&amp;>span]:line-clamp-1 z-50 flex rounded-r-[10px] px-[15px] justify-center "
+                      onClick={toggleDropdown}
+                    >
+                      <span>{token} ▼</span>
+                    </button>
 
-                  
-            <div className="flex items-center h-[50px] p-[2px] relative">
-            <button
-              type="button"
-              className="group h-full items-center rounded-[10px] bg-slate-900 border border-slate-500  placeholder:text-white text-white  disabled:cursor-not-allowed disabled:opacity-50 [&amp;>span]:line-clamp-1 z-50 flex rounded-r-[10px] px-[15px] justify-center "
-              onClick={toggleDropdown}
-            >
-              <span>{token} ▼</span>
-            </button>
-
-            {dropdownVisible && (
-              <div className="absolute top-[55px] text-[20px] left-2 bg-[#061230] text-white rounded-lg shadow-lg w-[100px] z-50">
-                {tokens.map((net) => (
-                  <div
-                    key={net}
-                    className="px-6 py-2 hover:bg-white hover:text-black rounded-xl  cursor-pointer"
-                    onClick={() => handleNetworkChange(net)}
-                  >
-                    {net}
+                    {dropdownVisible && (
+                      <div className="absolute top-[55px] text-[20px] left-2 bg-[#061230] text-white rounded-lg shadow-lg w-[100px] z-50">
+                        {tokens.map((net) => (
+                          <div
+                            key={net}
+                            className="px-6 py-2 hover:bg-white hover:text-black rounded-xl  cursor-pointer"
+                            onClick={() => handleNetworkChange(net)}
+                          >
+                            {net}
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
                 </div>
               </div>
             </div>
