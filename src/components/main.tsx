@@ -146,11 +146,11 @@ const OngoingEvents: React.FC = () => {
   };
 
   return (
-    <div className="text-white  flex gap-x-5 mt-8 pb-8">
+    <div className="text-white   flex gap-x-5 mt-8 pb-8">
       {data.map((items, index) => (
         <div
           key={index}
-          className="bg-[#2D2F6F] w-[315px] border border-pink-300 rounded-lg"
+          className="bg-[#2D2F6F] hover:translate-y-[-5.5px] transition-all duration-200 hover:cursor-pointer w-[315px] border border-pink-300 rounded-lg"
         >
           <div className="flex justify-between  items-center">
             <div className="flex flex-col gap-x-2 font-serif mt-5">
@@ -363,7 +363,7 @@ const Main: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="">
       {/* ----------versus--------- */}
       <div className="mt-[10px] ml-[100px] z-10 w-[1050px]">
         <h1 className="text-[30px] text-white lg:text-[40px] leading-[40px] mb-[10px] lg:mb-[20px] font-medium">
@@ -469,7 +469,7 @@ const Main: React.FC = () => {
                 </svg>
               </button>
               {isTokensDropdownOpen && (
-                <ul className="absolute top-[70px] z-10 bg-slate-800 text-white rounded-[10px] w-[180px] p-2 shadow-md">
+                <ul className="absolute top-[70px] z-10  text-white rounded-[10px] w-[180px] p-2 shadow-md">
                   {["All Tokens", "RBN"].map((token) => (
                     <li
                       key={token}
