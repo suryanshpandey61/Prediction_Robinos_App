@@ -5,6 +5,12 @@ import logo from "../assets/robinos_islogo.svg";
 import { FaWallet } from "react-icons/fa";
 
 function sidebar() {
+
+  const handleRefresh = () => {
+    window.location.reload(); // This will reload the page
+  };
+
+
   return (
     <div className="w-[300px] h-[100vh] pt-[20px] pl-[20px] space-y-[px] bg-[#061230] text-white">
       <div className=" h-[110px] ">
@@ -27,6 +33,7 @@ function sidebar() {
             href="/"
             className="hover:text-blue-600 "
             aria-label="versus-events"
+            
           >
             <svg
               className="inline mr-[15px] fill-slate-500  hover:fill-blue-600"
@@ -70,7 +77,7 @@ function sidebar() {
         </li>   
         <li className="mb-[40px]">
           <a
-            href="/minoNFT"
+            href="https://mino.robinos.finance/"
             aria-label="Mino NFT"
             className="hover:text-blue-600"
             target="_blank"
@@ -90,7 +97,7 @@ function sidebar() {
         </li>
         <li className="mb-[40px]">
           <a
-            href="/swapsicle"
+            href="https://swapsicle.io/"
             className="hover:text-blue-600"
             aria-label="Swapsicle"
             target="_blank"
