@@ -144,10 +144,23 @@ const Portfolio: React.FC = () => {
                   <div className="flex items-center h-[50px] p-[2px] relative">
                     <button
                       type="button"
-                      className="group h-full items-center rounded-[10px] bg-slate-900 border border-slate-500  placeholder:text-white text-white  disabled:cursor-not-allowed disabled:opacity-50 [&amp;>span]:line-clamp-1 z-50 flex rounded-r-[10px] px-[15px] justify-center "
+                      className="group h-full  items-center rounded-[10px]  border border-slate-500  placeholder:text-white text-white  disabled:cursor-not-allowed disabled:opacity-50 [&amp;>span]:line-clamp-1 z-50 flex rounded-r-[10px] px-[15px] justify-center "
                       onClick={toggleDropdown}
                     >
-                      <span>{token} ▼</span>
+                      <span className="flex items-center gap-x-1">{token} <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="h-4 w-4 opacity-50"
+          aria-hidden="true"
+        >
+          <path d="m6 9 6 6 6-6"></path></svg></span>
                     </button>
 
                     {dropdownVisible && (
@@ -171,7 +184,7 @@ const Portfolio: React.FC = () => {
         </div>
 
         {/* bet history div  */}
-        <div className="w-full flex flex-col lg:flex-row gap-[10px] border border-pink-800 rounded-xl p-4 items-center mt-4">
+        <div className="w-full flex flex-col lg:flex-row gap-[10px] border border-pink-900 rounded-xl p-4 items-center mt-4">
           <div>
             <button className="bg-[#2563EB] text-white px-[70px] outline outline-black text-[20px] py-2 rounded-xl hover:cursor-pointer ">Versus</button>
           </div>
@@ -222,14 +235,14 @@ const Portfolio: React.FC = () => {
         </svg>
       </button>
       {isTokensDropdownOpen && (
-        <ul className="absolute top-[70px] z-10 bg-slate-800 text-white rounded-[10px] w-[180px] p-2 shadow-md">
-          {["Tokens", "USDM","RBN"].map((token) => (
+        <ul className="absolute top-[70px] z-10 bg-[#061230] text-white rounded-[10px] w-[180px] p-2 shadow-md">
+          {["All Tokens", "USDM","RBN"].map((token) => (
             <li
               key={token}
-              className="p-2 hover:bg-slate-700 rounded cursor-pointer"
+              className="px-6 py-2 hover:bg-white hover:text-black rounded-xl  cursor-pointer"
               onClick={() => handleTokenSelect(token)}
             >
-              {token}
+            {token}
             </li>
           ))}
         </ul>
@@ -259,11 +272,11 @@ const Portfolio: React.FC = () => {
         </svg>
       </button>
       {isSportsDropdownOpen && (
-        <ul className="absolute top-[70px] left-[195px] z-10 bg-slate-800 text-white rounded-[10px] w-[180px] p-2 shadow-md">
-          {["League",  "Seria A 24/25","Las Vegas 24/25","EPL 24/25","Football",].map((sport) => (
+        <ul className="absolute top-[70px] left-[195px] z-10 bg-[#061230] text-white rounded-[10px] w-[180px] p-2 shadow-md">
+          {["League",  "Seria A 24/25","Las Vegas 24/25","EPL 24/25","Laliga 24/25",].map((sport) => (
             <li
               key={sport}
-              className="p-2 hover:bg-slate-700 rounded cursor-pointer"
+              className="px-6 py-2 hover:bg-white hover:text-black rounded-xl bg:transparent  cursor-pointer"
               onClick={() => handleSportSelect(sport)}
             >
               {sport}
