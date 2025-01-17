@@ -324,11 +324,11 @@ const OngoingEvents: React.FC = () => {
 
 
 const ResultsEvents = () => (
-  <div className="p-4 bg-slate-800 text-white rounded-xl">Results Events Content</div>
+  <div className="text-white h-[100vh]">Results Events Content</div>
 );
 
 const StakedEvents = () => (
-  <div className="p-4 bg-slate-800 text-white rounded-xl">Staked Events Content</div>
+  <div className="h-[100vh] overflow-x-hidden text-white text-[20px] flex justify-center">You does not have any staked Events </div>
 );
 
 const Main: React.FC = () => {
