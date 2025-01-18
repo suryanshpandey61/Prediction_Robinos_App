@@ -460,7 +460,7 @@ const ResultsEvents: React.FC = () => {
               </div>
             </div>
 
-            <Image src={RobinoLogo} alt="" className="pr-2 w-[48px]" />
+            <Image src={RobinoLogo} alt="" className="pr-2 w-[49px]" />
           </div>
 
           <div className="flex p-4 gap-x-4 mt-4">
