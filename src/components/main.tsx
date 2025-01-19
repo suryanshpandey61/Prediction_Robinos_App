@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import eventData from "../../events.json";
 import { ethers } from "ethers";
 import RobinoLogo from "../assets/token_40px.png";
@@ -547,12 +547,20 @@ const StakedEvents = () => (
 );
 
 
+
+
 const Main: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("ongoing");
   const [isTokensDropdownOpen, setTokensDropdownOpen] = useState<boolean>(false);
   const [isSportsDropdownOpen, setSportsDropdownOpen] = useState<boolean>(false);
   const [selectedToken, setSelectedToken] = useState<string>("All Tokens");
   const [selectedSport, setSelectedSport] = useState<string>("All Sports");
+
+  // Refs for the dropdowns
+  const tokensDropdownRef = useRef<HTMLUListElement | null>(null);
+  const sportsDropdownRef = useRef<HTMLUListElement | null>(null);
+  const tokensButtonRef = useRef<HTMLButtonElement | null>(null);
+  const sportsButtonRef = useRef<HTMLButtonElement | null>(null);
 
   const handleTabClick = (tab: string): void => {
     setActiveTab(tab);
@@ -577,6 +585,36 @@ const Main: React.FC = () => {
     setSelectedSport(sport);
     setSportsDropdownOpen(false); // Close dropdown after selection
   };
+
+  // Close dropdowns if clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        tokensDropdownRef.current &&
+        !tokensDropdownRef.current.contains(event.target as Node) &&
+        tokensButtonRef.current &&
+        !tokensButtonRef.current.contains(event.target as Node)
+      ) {
+        setTokensDropdownOpen(false);
+      }
+      if (
+        sportsDropdownRef.current &&
+        !sportsDropdownRef.current.contains(event.target as Node) &&
+        sportsButtonRef.current &&
+        !sportsButtonRef.current.contains(event.target as Node)
+      ) {
+        setSportsDropdownOpen(false);
+      }
+    };
+
+    // Add event listener for click outside
+    document.addEventListener("mousedown", handleClickOutside);
+
+    // Clean up event listener on component unmount
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="">
@@ -664,6 +702,7 @@ const Main: React.FC = () => {
               {/* All Tokens Dropdown */}
               <button
                 type="button"
+                ref={tokensButtonRef}
                 onClick={toggleTokensDropdown}
                 className="flex h-[60px] items-center justify-between rounded-[10px] border border-slate-700 text-white px-[10px] xl:px-[20px] w-full"
               >
@@ -685,11 +724,14 @@ const Main: React.FC = () => {
                 </svg>
               </button>
               {isTokensDropdownOpen && (
-                <ul className="absolute top-[70px] z-10 text-white rounded-[10px] w-[180px] p-2 shadow-md">
+                <ul
+                  ref={tokensDropdownRef}
+                  className="absolute top-[70px] z-10 text-white border rounded-[10px] w-[262px] p-4 shadow-md"
+                >
                   {["All Tokens", "RBN"].map((token) => (
                     <li
                       key={token}
-                      className="p-2 hover:bg-slate-700 rounded cursor-pointer"
+                      className="p-5 hover:bg-white hover:text-black rounded flex justify-center cursor-pointer"
                       onClick={() => handleTokenSelect(token)}
                     >
                       {token}
@@ -701,6 +743,7 @@ const Main: React.FC = () => {
               {/* All Sports Dropdown */}
               <button
                 type="button"
+                ref={sportsButtonRef}
                 onClick={toggleSportsDropdown}
                 className="flex h-[60px] items-center justify-between rounded-[10px] border border-slate-700 text-white px-[10px] xl:px-[20px] w-full"
               >
@@ -722,11 +765,14 @@ const Main: React.FC = () => {
                 </svg>
               </button>
               {isSportsDropdownOpen && (
-                <ul className="absolute top-[70px] left-[195px] z-10 bg-slate-800 text-white rounded-[10px] w-[180px] p-2 shadow-md">
-                  {["All Sports", "Other", "F!", "Crypto", "Football"].map((sport) => (
+                <ul
+                  ref={sportsDropdownRef}
+                  className="absolute top-[70px] right-0 z-10 border text-white rounded-[10px] w-[260px] p-4 shadow-md"
+                >
+                  {["All Sports", "Other", "Fifa", "Crypto", "Football"].map((sport) => (
                     <li
                       key={sport}
-                      className="p-2 hover:bg-slate-700 rounded cursor-pointer"
+                      className="p-5 hover:bg-white hover:text-black rounded cursor-pointer flex justify-center"
                       onClick={() => handleSportSelect(sport)}
                     >
                       {sport}
@@ -747,6 +793,8 @@ const Main: React.FC = () => {
     </div>
   );
 };
+
+
 
 
 export default Main;
