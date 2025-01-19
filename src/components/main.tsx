@@ -5,6 +5,8 @@ import { ethers } from "ethers";
 import RobinoLogo from "../assets/token_40px.png";
 import Image from "next/image";
 import Slider from "./Slider";
+import { AiFillThunderbolt } from "react-icons/ai";
+
 import { SlCalender } from "react-icons/sl";
 
 interface Team {
@@ -464,7 +466,7 @@ const ResultsEvents: React.FC = () => {
           </div>
 
           <div className="flex p-4 gap-x-4 mt-4">
-            <div className="bg-[#453982] items-center p-4 flex-col w-[180px] gap-y-4 flex justify-center  border border-pink-200 rounded-lg">
+            <div className="bg-[#7860f2] items-center p-4 flex-col w-[180px] gap-y-4 flex justify-center  border-[2px] border-pink-600 rounded-lg">
               <p className="text-[20px] font-semibold">
                 {" "}
                 {items.teamA.symbol}{" "}
@@ -480,7 +482,7 @@ const ResultsEvents: React.FC = () => {
                 <p className="text-[20px]">1.90</p>
               </div>
             </div>
-            <div className="bg-[#453982] p-4 flex-col w-[180px] items-center  flex justify-center gap-y-4 border border-pink-200 rounded-lg">
+            <div className=" p-4 flex-col w-[180px] items-center  flex justify-center gap-y-4 bg-[#2f2176]  rounded-lg">
               <p className="text-[20px] font-semibold">
                 {items.teamB.symbol} <span className="text-red-600">-0.5</span>
               </p>
@@ -499,7 +501,7 @@ const ResultsEvents: React.FC = () => {
             <Slider />
           </div>
 
-          <div className="pl-4 cursor-pointer mt-4" onClick={()=>openModal(items)}>
+          <div className="pl-4 cursor-pointer mt-4" >
           <div className="flex justify-between  rounded-lg bg-[#061230] w-[280px] pl-4  items-center">
             <div className="flex flex-col gap-x-2  py-[6px]">
               <p className="text-slate-400  items-center flex font-bold ">Prize Pool</p>
@@ -512,111 +514,19 @@ const ResultsEvents: React.FC = () => {
 
            
           </div>
-          {/* <button
-            className="border border-green-300 mb-4 rounded-lg bg-[#825779] transition-all duration-500 hover:bg-green-500 px-6 text-[20px] flex justify-center mx-auto mt-4"
-            onClick={() => openModal(items)}
-          >
-            Prize Pool
-          </button> */}
+         
           <div className="h-[1px] ml-[14px] mt-4 w-[285px] bg-slate-400"></div>
          <div className="flex w-[300px] pl-4 justify-between items-center mt-4 mb-4">
          <p className="text-[16px] ">
-            Sale End at <span className="font-semibold"> {items.saleEnds}</span> 
-          </p><SlCalender />
+           Reward Distributed
+          </p><AiFillThunderbolt />
+
 
          </div>
         </div>
       ))}
 
-      {/* Modal */}
-      {isModalOpen && selectedEvent && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-[#2D2F6F] p-8 w-[600px] rounded-lg">
-            <h2 className="text-white text-2xl font-bold mb-4">
-              Bid on a Team
-            </h2>
-            <h1 className="text-white font-semibold text-xl mb-3">
-              Select Team
-            </h1>
-
-            {/* Team Cards for Bid Selection */}
-            <div className="flex justify-between mb-4">
-              <div
-                className={`w-[250px] p-4 text-center rounded-lg cursor-pointer border-2 ${
-                  selectedTeam === selectedEvent.teamA.name
-                    ? "border-green-500"
-                    : "border-gray-300"
-                } transition-all hover:border-green-500`}
-                onClick={() => handleTeamChange(selectedEvent.teamA.name)}
-              >
-                <div className="text-4xl">{selectedEvent.teamA.symbol}</div>
-                <p className="text-white mt-2">{selectedEvent.teamA.name}</p>
-              </div>
-
-              <div
-                className={`w-[250px] p-4 text-center rounded-lg cursor-pointer border-2 ${
-                  selectedTeam === selectedEvent.teamB.name
-                    ? "border-green-500"
-                    : "border-gray-300"
-                } transition-all hover:border-green-500`}
-                onClick={() => handleTeamChange(selectedEvent.teamB.name)}
-              >
-                <div className="text-4xl">{selectedEvent.teamB.symbol}</div>
-                <p className="text-white mt-2">{selectedEvent.teamB.name}</p>
-              </div>
-            </div>
-
-            {/* Preview Card (Selected Team) */}
-            {selectedTeam && (
-              <div className="mt-4 bg-[#453982] p-4 rounded-lg flex justify-between items-center">
-                <div className="text-3xl">
-                  {selectedTeam === selectedEvent.teamA.name
-                    ? selectedEvent.teamA.symbol
-                    : selectedEvent.teamB.symbol}
-                </div>
-                <p className="text-white text-xl">
-                  {selectedTeam} <span className="text-green-500">✔</span>
-                </p>
-              </div>
-            )}
-
-            {/* Show Amount Input only if a team is selected */}
-            {selectedTeam && (
-              <div className="mb-4">
-                <p className="text-white text-xl mb-2">Enter Amount for Bid </p>
-                <input
-                  type="number"
-                  value={amount}
-                  onChange={handleAmountChange}
-                  className="w-full p-2 rounded-lg border-2 border-pink-300 text-black"
-                  placeholder="Amount"
-                />
-              </div>
-            )}
-
-            {/* Display Token Balance */}
-            <div className="mb-4">
-              <p className="text-white text-xl mb-2">Your Token Balance</p>
-              <p className="text-white">{balance} Tokens</p>
-            </div>
-
-            <div className="flex justify-between gap-5">
-              <button
-                onClick={closeModal}
-                className="bg-red-500 text-white py-2 px-6 rounded-lg hover:bg-red-700"
-              >
-                Close
-              </button>
-              <button
-                onClick={handleSubmit}
-                className="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-700"
-              >
-                Submit
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      
     </div>
   );
 };
