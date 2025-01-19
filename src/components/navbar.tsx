@@ -6,22 +6,22 @@ import Image from "next/image";
 
 function Navbar() {
   const [network, setNetwork] = useState<string>("Telos");
-  const [currency, setCurrency] = useState<string>("USDM"); // State for currency
+  const [currency, setCurrency] = useState<string>("USDM");
   const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
-  const [currencyDropdownVisible, setCurrencyDropdownVisible] = useState<boolean>(false); // Currency dropdown visibility
+  const [currencyDropdownVisible, setCurrencyDropdownVisible] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [installedWallets, setInstalledWallets] = useState<{
     [key: string]: boolean;
-  }>({
+  }>( {
     MetaMask: false,
     Rainbow: false,
     Coinbase: false,
     WalletConnect: false,
   });
-  const [account, setAccount] = useState<string | null>(null); // Store the connected account
+  const [account, setAccount] = useState<string | null>(null);
 
   const networks = ["Telos", "Taiko", "Mantle"];
-  const currencies = ["USDM", "RBN"]; // Available currencies
+  const currencies = ["USDM", "RBN"];
   const wallets = [
     { name: "MetaMask", logo: metamaskLogo, installUrl: "https://metamask.io/" },
     { name: "Rainbow", logo: rainbow, installUrl: "https://rainbow.me/" },
@@ -117,7 +117,7 @@ function Navbar() {
 
   const handleCurrencyChange = (newCurrency: string): void => {
     setCurrency(newCurrency);
-    setCurrencyDropdownVisible(false); // Close the currency dropdown after selection
+    setCurrencyDropdownVisible(false);
   };
 
   const toggleDropdown = (): void => {
@@ -133,26 +133,35 @@ function Navbar() {
   };
 
   const handleDisconnect = () => {
-    setAccount(null); // Clear the connected account to simulate a disconnection
+    setAccount(null);
   };
+
+  const buttonStyle = account ? "border-4 border-gradient-to-r from-purple-400 via-pink-500 to-red-500" : "";
 
   return (
     <div>
       {/* Navbar */}
       <div className="flex mt-[20px] ml-[700px]">
         {/* Network Dropdown */}
-        <div className="relative rounded-[10px] font-medium text-14 hidden md:flex mr-[10px]">
+        <div className={`relative rounded-[10px] font-medium text-14 hidden md:flex mr-[10px] ${buttonStyle}`}>
           <div className="flex items-center h-[50px] p-[2px] relative">
             <button
               type="button"
-              className="group h-full items-center rounded-[10px] bg-slate-900 border-2 border-blue-500 placeholder:text-white text-white outline-none disabled:cursor-not-allowed disabled:opacity-50 [&amp;>span]:line-clamp-1 z-50 flex rounded-r-[10px] px-[15px] min-w-52 justify-center border-none"
+              className="group h-full items-center rounded-[10px] bg-[#061230] border-2 border-blue-500 placeholder:text-white text-white outline-none disabled:cursor-not-allowed disabled:opacity-50 [&amp;>span]:line-clamp-1 z-50 flex rounded-r-[10px] px-[15px] min-w-52 justify-center border-none"
               onClick={toggleDropdown}
             >
               <span>{network}</span>
+              <span
+                className={`ml-2 transform transition duration-300 ${
+                  dropdownVisible ? "rotate-180" : ""
+                }`}
+              >
+                ▼
+              </span>
             </button>
 
             {dropdownVisible && (
-              <div className="absolute top-[55px] left-2 bg-slate-700 text-white rounded-lg shadow-lg w-[200px] z-50">
+              <div className="absolute top-[55px] left-2 bg-[#061230] text-white rounded-lg shadow-lg w-[200px] z-50">
                 {networks.map((net) => (
                   <div
                     key={net}
@@ -168,7 +177,7 @@ function Navbar() {
         </div>
 
         {/* Currency Dropdown */}
-        <div className="relative rounded-[10px] font-medium text-14 hidden md:flex mr-[10px]">
+        <div className={`relative rounded-[10px] font-medium text-14 hidden md:flex mr-[10px] ${buttonStyle}`}>
           <div className="flex items-center h-[50px] p-[2px] relative">
             <button
               type="button"
@@ -176,6 +185,13 @@ function Navbar() {
               onClick={toggleCurrencyDropdown}
             >
               <span>{currency}</span>
+              <span
+                className={`ml-2 transform transition duration-300 ${
+                  currencyDropdownVisible ? "rotate-180" : ""
+                }`}
+              >
+                ▼
+              </span>
             </button>
 
             {currencyDropdownVisible && (
@@ -196,7 +212,7 @@ function Navbar() {
 
         {/* Wallet Connect Button */}
         <div
-          className="rounded-[10px] font-medium text-[16px] px-[28px] relative bg-blue-600 hover:bg-blue-400 transition cursor-pointer"
+          className={`rounded-[10px] font-medium text-[16px] px-[28px] relative transition cursor-pointer ${buttonStyle}`}
           onClick={toggleModal}
         >
           <div className="flex items-center justify-center h-[55px]">
