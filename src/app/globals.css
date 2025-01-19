@@ -5,9 +5,10 @@
 
 .bg-gradient{
   background-image: url('../assets/bg.png');
-  background-position-x: 50%;
-  background-position-y: 0%;
-  background-size: auto 150%;
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+  height: 100vh;
 }
 .img{
   background-image: url('../assets/robinos_islogo.svg');

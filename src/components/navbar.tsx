@@ -2,17 +2,23 @@ import React, { useState, useEffect } from "react";
 import metamaskLogo from "../assets/metamask.png";
 import coinbase from "../assets/coinbase.png";
 import rainbow from "../assets/rainbow.png";
+import telosLogo from "../assets/telosLogo.png"; // Example logo for Telos network
+import taikoLogo from "../assets/taikoLogo.png"; // Example logo for Taiko network
+import mantleLogo from "../assets/mantleLogo.png"; // Example logo for Mantle network
+import dollarIcon from "../assets/usdm.png";
+import RBNLogo from "../assets/token_40px.png"; // Dollar symbol icon for currency
 import Image from "next/image";
 
 function Navbar() {
   const [network, setNetwork] = useState<string>("Telos");
   const [currency, setCurrency] = useState<string>("USDM");
   const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
-  const [currencyDropdownVisible, setCurrencyDropdownVisible] = useState<boolean>(false);
+  const [currencyDropdownVisible, setCurrencyDropdownVisible] =
+    useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [installedWallets, setInstalledWallets] = useState<{
     [key: string]: boolean;
-  }>( {
+  }>({
     MetaMask: false,
     Rainbow: false,
     Coinbase: false,
@@ -20,12 +26,29 @@ function Navbar() {
   });
   const [account, setAccount] = useState<string | null>(null);
 
-  const networks = ["Telos", "Taiko", "Mantle"];
-  const currencies = ["USDM", "RBN"];
+  const networks = [
+    { name: "Telos", logo: telosLogo },
+    { name: "Taiko", logo: taikoLogo },
+    { name: "Mantle", logo: mantleLogo },
+  ];
+
+  const currencies = [
+    { name: "USDM", logo: dollarIcon },
+    { name: "RBN", logo: RBNLogo }, // Update this line to use RBNLogo
+  ];
+
   const wallets = [
-    { name: "MetaMask", logo: metamaskLogo, installUrl: "https://metamask.io/" },
+    {
+      name: "MetaMask",
+      logo: metamaskLogo,
+      installUrl: "https://metamask.io/",
+    },
     { name: "Rainbow", logo: rainbow, installUrl: "https://rainbow.me/" },
-    { name: "Coinbase", logo: coinbase, installUrl: "https://www.coinbase.com" },
+    {
+      name: "Coinbase",
+      logo: coinbase,
+      installUrl: "https://www.coinbase.com",
+    },
   ];
 
   useEffect(() => {
@@ -136,21 +159,29 @@ function Navbar() {
     setAccount(null);
   };
 
-  const buttonStyle = account ? "border-4 border-gradient-to-r from-purple-400 via-pink-500 to-red-500" : "";
+  const buttonStyle = account
+    ? "border-4 border-gradient-to-r from-purple-400 via-pink-500 to-red-500"
+    : "";
 
   return (
-    <div>
+    <div className="relative">
       {/* Navbar */}
-      <div className="flex mt-[20px] ml-[700px]">
-        {/* Network Dropdown */}
-        <div className={`relative rounded-[10px] font-medium text-14 hidden md:flex mr-[10px] ${buttonStyle}`}>
-          <div className="flex items-center h-[50px] p-[2px] relative">
-            <button
-              type="button"
-              className="group h-full items-center rounded-[10px] bg-[#061230] border-2 border-blue-500 placeholder:text-white text-white outline-none disabled:cursor-not-allowed disabled:opacity-50 [&amp;>span]:line-clamp-1 z-50 flex rounded-r-[10px] px-[15px] min-w-52 justify-center border-none"
-              onClick={toggleDropdown}
-            >
-              <span>{network}</span>
+      <div className="flex border border-pink-600 rounded-lg p-2 gap-x-3 mt-[20px] ml-[700px]">
+        {/* Network Button with Dropdown */}
+        <div className="relative">
+          <button
+            type="button"
+            className="flex bg-slate-700 px-12 py-2 justify-center items-center text-white rounded-md"
+            onClick={toggleDropdown}
+          >
+            <span className="flex gap-x-3">
+              <Image
+                src={networks.find((net) => net.name === network)?.logo || ""}
+                alt={network}
+                width={20}
+                height={20}
+              />
+              {network}
               <span
                 className={`ml-2 transform transition duration-300 ${
                   dropdownVisible ? "rotate-180" : ""
@@ -158,51 +189,72 @@ function Navbar() {
               >
                 ▼
               </span>
-            </button>
+              <span>0.000 </span>
+            </span>
+          </button>
 
-            {dropdownVisible && (
-              <div className="absolute top-[55px] left-2 bg-[#061230] text-white rounded-lg shadow-lg w-[200px] z-50">
-                {networks.map((net) => (
-                  <div
-                    key={net}
-                    className="px-6 py-2 hover:bg-blue-600 rounded-xl cursor-pointer"
-                    onClick={() => handleNetworkChange(net)}
-                  >
-                    {net}
+          {dropdownVisible && (
+            <div className="absolute top-[60px] left-0 bg-[#061230] text-white rounded-lg shadow-lg w-[245px] z-50">
+              {networks.map((net) => (
+                <div
+                  key={net.name}
+                  className="px-6 py-2 hover:bg-blue-600 rounded-xl cursor-pointer"
+                  onClick={() => handleNetworkChange(net.name)}
+                >
+                  <div className="flex items-center">
+                    <Image src={net.logo} alt={net.name} width={20} height={20} />
+                    <span className="ml-3">{net.name}</span>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Currency Dropdown */}
-        <div className={`relative rounded-[10px] font-medium text-14 hidden md:flex mr-[10px] ${buttonStyle}`}>
-          <div className="flex items-center h-[50px] p-[2px] relative">
+        <div>
+          <div className="flex items-center justify-center relative">
             <button
               type="button"
-              className="group h-full items-center rounded-[10px] bg-slate-900 border-2 border-blue-500 placeholder:text-white text-white outline-none disabled:cursor-not-allowed disabled:opacity-50 [&amp;>span]:line-clamp-1 z-50 flex rounded-r-[10px] px-[15px] min-w-52 justify-center border-none"
+              className="flex bg-slate-700 px-12 py-2 justify-center items-center text-white rounded-md"
               onClick={toggleCurrencyDropdown}
             >
-              <span>{currency}</span>
+              <span className="flex items-center gap-x-2">
+                
+                {currency === "USDM" && (
+                  <Image src={dollarIcon} alt="Dollar" width={20} height={20} />
+                )}
+                {currency === "RBN" && (
+                  <Image src={RBNLogo} alt="RBN Logo" width={20} height={20} />
+                )}
+                {currency} <span>0.000</span>
+              </span>
               <span
                 className={`ml-2 transform transition duration-300 ${
                   currencyDropdownVisible ? "rotate-180" : ""
                 }`}
               >
-                ▼
+                ▼ 
               </span>
             </button>
 
             {currencyDropdownVisible && (
-              <div className="absolute top-[55px] left-2 bg-slate-700 text-white rounded-lg shadow-lg w-[200px] z-50">
+              <div className="absolute top-[55px] left-0 bg-[#061230] text-white rounded-lg shadow-lg w-[240px] z-50">
                 {currencies.map((curr) => (
                   <div
-                    key={curr}
+                    key={curr.name}
                     className="px-6 py-2 hover:bg-blue-600 rounded-xl cursor-pointer"
-                    onClick={() => handleCurrencyChange(curr)}
+                    onClick={() => handleCurrencyChange(curr.name)}
                   >
-                    {curr}
+                    <div className="flex items-center">
+                      {curr.name === "USDM" && (
+                        <Image src={curr.logo} alt={curr.name} width={20} height={20} />
+                      )}
+                      {curr.name === "RBN" && (
+                        <Image src={curr.logo} alt={curr.name} width={20} height={20} />
+                      )}
+                      <span className="ml-3">{curr.name}</span>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -211,15 +263,13 @@ function Navbar() {
         </div>
 
         {/* Wallet Connect Button */}
-        <div
-          className={`rounded-[10px] font-medium text-[16px] px-[28px] relative transition cursor-pointer ${buttonStyle}`}
-          onClick={toggleModal}
-        >
-          <div className="flex items-center justify-center h-[55px]">
-            <span>
+        <div className="text-slate-400 cursor-pointer text-[20px]" onClick={toggleModal}>
+          <div className="flex items-center justify-center ">
+            <span className="flex gap-x-1.5 items-center justify-center">
               {account
                 ? `Connected: ${account.slice(0, 6)}...${account.slice(-4)}`
-                : "Connect wallet"}
+                : "Connect wallet"}{" "}
+              <Image src={RBNLogo} alt="RBNLOGO" height={40} />
             </span>
           </div>
         </div>
