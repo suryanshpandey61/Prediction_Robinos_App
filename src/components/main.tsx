@@ -6,6 +6,8 @@ import RobinoLogo from "../assets/token_40px.png";
 import Image from "next/image";
 import Slider from "./Slider";
 import { AiFillThunderbolt } from "react-icons/ai";
+import { TiPlus } from "react-icons/ti";
+import IPLLogo from "../assets/IPl.png"
 
 import { SlCalender } from "react-icons/sl";
 
@@ -148,9 +150,12 @@ const OngoingEvents: React.FC = () => {
   };
 
   return (
-    <div className="text-white   flex gap-x-5 mt-8 pb-8">
+    <div 
+   
+    className="text-white   flex gap-x-5 mt-8 pb-8">
       {data.map((items, index) => (
         <div
+        onClick={()=>openModal(items)}
           key={index}
           className="bg-[#2D2F6F] hover:translate-y-[-5.5px] transition-all duration-200 hover:cursor-pointer w-[315px] border border-pink-300 rounded-lg"
         >
@@ -163,7 +168,7 @@ const OngoingEvents: React.FC = () => {
               </div>
             </div>
 
-            <Image src={RobinoLogo} alt="" className="pr-2 w-[48px]" />
+            <Image src={IPLLogo} alt="" className="pr-2 w-[58px]" />
           </div>
 
           <div className="flex p-4 gap-x-4 mt-4">
@@ -202,7 +207,7 @@ const OngoingEvents: React.FC = () => {
             <Slider />
           </div>
 
-          <div className="pl-4 cursor-pointer mt-4" onClick={()=>openModal(items)}>
+          <div className="pl-4 cursor-pointer mt-4" >
           <div className="flex justify-between  rounded-lg bg-[#061230] w-[280px] pl-4  items-center">
             <div className="flex flex-col gap-x-2  py-[6px]">
               <p className="text-slate-400  items-center flex font-bold ">Prize Pool</p>
@@ -462,7 +467,7 @@ const ResultsEvents: React.FC = () => {
               </div>
             </div>
 
-            <Image src={RobinoLogo} alt="" className="pr-2 w-[49px]" />
+            <Image src={IPLLogo} alt="" className="pr-2 w-[60px]" />
           </div>
 
           <div className="flex p-4 gap-x-4 mt-4">
@@ -477,9 +482,13 @@ const ResultsEvents: React.FC = () => {
                 alt={`${items.teamA} Image`}
                 className="object-cover w-[80px] rounded-xl"
               />
-              <div className="flex  flex-col ml-[-70px]">
+              <div className=" flex gap-x-6">
+              <div className="flex px] mt-2  flex-col ">
                 <p className="text-slate-400 font-bold">ROI</p>
                 <p className="text-[20px]">1.90</p>
+              </div><div className="text-[35px] ml-3 mt-7 flex items-center">
+              <TiPlus />
+              </div>
               </div>
             </div>
             <div className=" p-4 flex-col w-[180px] items-center  flex justify-center gap-y-4 bg-[#2f2176]  rounded-lg">
@@ -572,14 +581,14 @@ const Main: React.FC = () => {
   return (
     <div className="">
       {/* ----------versus--------- */}
-      <div className="mt-[10px] ml-[10px] lg:ml-[100px] z-10 w-full lg:w-[1050px]">
+      <div className="mt-[10px] ml-[10px] lg:ml-[100px] z-10 w-full lg:w-[1350px]">
         <h1 className="text-[30px] text-white lg:text-[40px] leading-[40px] mb-[10px] lg:mb-[20px] font-medium">
           Versus
         </h1>
         <div
           role="tablist"
           aria-orientation="horizontal"
-          className="items-center justify-center bg rounded-xl text-slate-500 dark:bg-slate-800 dark:text-slate-400  shadow p-[10px] font-medium text-[14px] lg:text-[16px] flex flex-col xl:flex-row gap-[10px]"
+          className="items-center justify-center bg rounded-xl text-slate-500 dark:bg-slate-800 dark:text-slate-400  shadow p-[10px] font-medium text-[14px] lg:text-[16px] flex flex-col xl:flex-row gap-[20px]"
           data-orientation="horizontal"
         >
           <div className="flex bg-slate-950 rounded-2xl p-[5px]  xl:w-[60%]">
@@ -589,7 +598,7 @@ const Main: React.FC = () => {
               aria-selected={activeTab === "ongoing"}
               aria-controls="radix-:R5f6la:-content-ongoing"
               id="radix-:R5f6la:-trigger-ongoing"
-              className={`inline-flex items-center justify-center p-[15px] font-medium transition-all ${
+              className={`inline-flex items-center justify-center px-[25px] py-4 font-medium transition-all ${
                 activeTab === "ongoing"
                   ? "bg-blue-600 text-white rounded-xl"
                   : "text-gray-300"
@@ -604,7 +613,7 @@ const Main: React.FC = () => {
               aria-selected={activeTab === "results"}
               aria-controls="radix-:R5f6la:-content-results"
               id="radix-:R5f6la:-trigger-results"
-              className={`inline-flex items-center justify-center whitespace-nowrap px-[20px] font-medium transition-all ${
+              className={`inline-flex items-center justify-center whitespace-nowrap px-[25px] py-4 font-medium transition-all ${
                 activeTab === "results"
                   ? "bg-blue-600 text-white rounded-xl"
                   : "text-gray-300"
@@ -619,7 +628,7 @@ const Main: React.FC = () => {
               aria-selected={activeTab === "staked"}
               aria-controls="radix-:R5f6la:-content-staked"
               id="radix-:R5f6la:-trigger-staked"
-              className={`inline-flex items-center justify-center whitespace-nowrap px-[20px] font-medium transition-all ${
+              className={`inline-flex items-center justify-center whitespace-nowrap px-[29px] py-4 font-medium transition-all ${
                 activeTab === "staked"
                   ? "bg-blue-600 text-white rounded-xl"
                   : "text-gray-300"
