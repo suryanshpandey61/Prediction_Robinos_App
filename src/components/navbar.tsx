@@ -6,7 +6,9 @@ import Image from "next/image";
 
 function Navbar() {
   const [network, setNetwork] = useState<string>("Telos");
+  const [currency, setCurrency] = useState<string>("USDM"); // State for currency
   const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
+  const [currencyDropdownVisible, setCurrencyDropdownVisible] = useState<boolean>(false); // Currency dropdown visibility
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [installedWallets, setInstalledWallets] = useState<{
     [key: string]: boolean;
@@ -19,6 +21,7 @@ function Navbar() {
   const [account, setAccount] = useState<string | null>(null); // Store the connected account
 
   const networks = ["Telos", "Taiko", "Mantle"];
+  const currencies = ["USDM", "RBN"]; // Available currencies
   const wallets = [
     { name: "MetaMask", logo: metamaskLogo, installUrl: "https://metamask.io/" },
     { name: "Rainbow", logo: rainbow, installUrl: "https://rainbow.me/" },
@@ -112,8 +115,17 @@ function Navbar() {
     setDropdownVisible(false);
   };
 
+  const handleCurrencyChange = (newCurrency: string): void => {
+    setCurrency(newCurrency);
+    setCurrencyDropdownVisible(false); // Close the currency dropdown after selection
+  };
+
   const toggleDropdown = (): void => {
     setDropdownVisible((prev) => !prev);
+  };
+
+  const toggleCurrencyDropdown = (): void => {
+    setCurrencyDropdownVisible((prev) => !prev);
   };
 
   const toggleModal = (): void => {
@@ -128,7 +140,8 @@ function Navbar() {
     <div>
       {/* Navbar */}
       <div className="flex mt-[20px] ml-[700px]">
-        <div className="rounded-[10px] font-medium text-14 relative gradient hidden md:flex mr-[10px]">
+        {/* Network Dropdown */}
+        <div className="relative rounded-[10px] font-medium text-14 hidden md:flex mr-[10px]">
           <div className="flex items-center h-[50px] p-[2px] relative">
             <button
               type="button"
@@ -153,6 +166,35 @@ function Navbar() {
             )}
           </div>
         </div>
+
+        {/* Currency Dropdown */}
+        <div className="relative rounded-[10px] font-medium text-14 hidden md:flex mr-[10px]">
+          <div className="flex items-center h-[50px] p-[2px] relative">
+            <button
+              type="button"
+              className="group h-full items-center rounded-[10px] bg-slate-900 border-2 border-blue-500 placeholder:text-white text-white outline-none disabled:cursor-not-allowed disabled:opacity-50 [&amp;>span]:line-clamp-1 z-50 flex rounded-r-[10px] px-[15px] min-w-52 justify-center border-none"
+              onClick={toggleCurrencyDropdown}
+            >
+              <span>{currency}</span>
+            </button>
+
+            {currencyDropdownVisible && (
+              <div className="absolute top-[55px] left-2 bg-slate-700 text-white rounded-lg shadow-lg w-[200px] z-50">
+                {currencies.map((curr) => (
+                  <div
+                    key={curr}
+                    className="px-6 py-2 hover:bg-blue-600 rounded-xl cursor-pointer"
+                    onClick={() => handleCurrencyChange(curr)}
+                  >
+                    {curr}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Wallet Connect Button */}
         <div
           className="rounded-[10px] font-medium text-[16px] px-[28px] relative bg-blue-600 hover:bg-blue-400 transition cursor-pointer"
           onClick={toggleModal}
@@ -160,7 +202,7 @@ function Navbar() {
           <div className="flex items-center justify-center h-[55px]">
             <span>
               {account
-                ? `Connected: ${account.slice(0, 6)}...`
+                ? `Connected: ${account.slice(0, 6)}...${account.slice(-4)}`
                 : "Connect wallet"}
             </span>
           </div>
@@ -204,21 +246,6 @@ function Navbar() {
                   </div>
                 </div>
               ))}
-
-              {/* Display MetaMask Connect button if MetaMask is installed */}
-              {installedWallets.MetaMask && !account && (
-                <div
-                  className="mt-4 flex items-center p-4 rounded-2xl bg-slate-800 hover:bg-slate-700 cursor-pointer"
-                  onClick={() => handleWalletSelection("MetaMask")}
-                >
-                  <Image
-                    src={metamaskLogo}
-                    alt="MetaMask"
-                    className="w-12 h-12 mr-4 rounded-lg"
-                  />
-                  <span className="text-sm">Connect Wallet</span>
-                </div>
-              )}
             </div>
 
             {/* Show Disconnect button if MetaMask is connected */}

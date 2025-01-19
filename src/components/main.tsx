@@ -622,8 +622,11 @@ const ResultsEvents: React.FC = () => {
 };
 
 const StakedEvents = () => (
-  <div className="h-[100vh] overflow-x-hidden text-white text-[20px] flex justify-center">You does not have any staked Events </div>
+  <div className="h-[100vh] overflow-x-hidden text-white text-[20px] sm:text-[18px] md:text-[22px] lg:text-[24px] flex justify-center items-center">
+    You do not have any staked Events
+  </div>
 );
+
 
 const Main: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("ongoing");
@@ -659,7 +662,7 @@ const Main: React.FC = () => {
   return (
     <div className="">
       {/* ----------versus--------- */}
-      <div className="mt-[10px] ml-[100px] z-10 w-[1050px]">
+      <div className="mt-[10px] ml-[10px] lg:ml-[100px] z-10 w-full lg:w-[1050px]">
         <h1 className="text-[30px] text-white lg:text-[40px] leading-[40px] mb-[10px] lg:mb-[20px] font-medium">
           Versus
         </h1>
@@ -678,7 +681,7 @@ const Main: React.FC = () => {
               id="radix-:R5f6la:-trigger-ongoing"
               className={`inline-flex items-center justify-center p-[15px] font-medium transition-all ${
                 activeTab === "ongoing"
-                  ? "bg-blue-600 text-white  rounded-xl"
+                  ? "bg-blue-600 text-white rounded-xl"
                   : "text-gray-300"
               }`}
               onClick={() => handleTabClick("ongoing")}
@@ -763,7 +766,7 @@ const Main: React.FC = () => {
                 </svg>
               </button>
               {isTokensDropdownOpen && (
-                <ul className="absolute top-[70px] z-10  text-white rounded-[10px] w-[180px] p-2 shadow-md">
+                <ul className="absolute top-[70px] z-10 text-white rounded-[10px] w-[180px] p-2 shadow-md">
                   {["All Tokens", "RBN"].map((token) => (
                     <li
                       key={token}
@@ -825,5 +828,6 @@ const Main: React.FC = () => {
     </div>
   );
 };
+
 
 export default Main;
