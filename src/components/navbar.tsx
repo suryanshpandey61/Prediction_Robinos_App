@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import metamaskLogo from "../assets/metamask.png";
 import coinbase from "../assets/coinbase.png";
 import rainbow from "../assets/rainbow.png";
@@ -51,6 +51,10 @@ function Navbar() {
     },
   ];
 
+  // Define the refs with appropriate type
+  const networkDropdownRef = useRef<HTMLDivElement | null>(null);
+  const currencyDropdownRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const detectWallets = () => {
@@ -76,6 +80,31 @@ function Navbar() {
           });
       }
     }
+  }, []);
+
+  // Close dropdowns if clicked outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        networkDropdownRef.current &&
+        !networkDropdownRef.current.contains(event.target as Node)
+      ) {
+        setDropdownVisible(false);
+      }
+
+      if (
+        currencyDropdownRef.current &&
+        !currencyDropdownRef.current.contains(event.target as Node)
+      ) {
+        setCurrencyDropdownVisible(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   const handleWalletSelection = (walletName: string): void => {
@@ -168,7 +197,7 @@ function Navbar() {
       {/* Navbar */}
       <div className="flex border border-pink-600 rounded-lg p-2 gap-x-3 mt-[20px] ml-[700px]">
         {/* Network Button with Dropdown */}
-        <div className="relative">
+        <div className="relative" ref={networkDropdownRef}>
           <button
             type="button"
             className="flex bg-slate-700 px-12 py-2 justify-center items-center text-white rounded-md"
@@ -212,7 +241,7 @@ function Navbar() {
         </div>
 
         {/* Currency Dropdown */}
-        <div>
+        <div ref={currencyDropdownRef}>
           <div className="flex items-center justify-center relative">
             <button
               type="button"
@@ -220,7 +249,6 @@ function Navbar() {
               onClick={toggleCurrencyDropdown}
             >
               <span className="flex items-center gap-x-2">
-                
                 {currency === "USDM" && (
                   <Image src={dollarIcon} alt="Dollar" width={20} height={20} />
                 )}
@@ -234,7 +262,7 @@ function Navbar() {
                   currencyDropdownVisible ? "rotate-180" : ""
                 }`}
               >
-                ▼ 
+                ▼
               </span>
             </button>
 

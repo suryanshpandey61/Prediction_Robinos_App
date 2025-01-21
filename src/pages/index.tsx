@@ -13,9 +13,12 @@ const Index: React.FC = () => {
 
 <div className='fixed'><Sidebar/></div>
 <div> </div>
-<div className='relative ml-[300px]'>
+<div className=''>
     <Navbar/>
+    
     <Main/>
+    
+    
    
  
     </div>
