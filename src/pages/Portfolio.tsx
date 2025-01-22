@@ -70,7 +70,7 @@ const Portfolio: React.FC = () => {
           <div className="text-white gap-x-4 flex items-center text-[20px] pl-4 pt-2">
             <FaWallet /> Wallet
           </div>
-          <div className="flex gap-x-2">
+          <div className="flex gap-x-3">
             <div className="flex justify-between   rounded-lg bg-[#061230] w-[490px] pl-4 ml-4 mt-2 mb-4  items-center">
               <div className="flex flex-col gap-x-2  py-[6px]">
                 <p className="text-white  items-center flex ">0.0000</p>
