@@ -160,7 +160,7 @@ const OngoingEvents: React.FC = () => {
           className="bg-[#2D2F6F] hover:translate-y-[-5.5px] transition-all duration-200 hover:cursor-pointer w-[315px] border border-pink-300 rounded-lg"
         >
           <div className="flex justify-between  items-center">
-            <div className="flex flex-col gap-x-2 font-serif mt-5">
+            <div className="flex flex-col gap-x-4 font-serif mt-5">
               <p className="text-slate-400  font-bold pl-4">{items.league}</p>
               <div className="flex gap-x-1 items-center pl-4 text-[20px] ">
                 <p className=""> {items.teamA.name}</p> v.
