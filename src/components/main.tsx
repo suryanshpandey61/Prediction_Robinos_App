@@ -173,7 +173,7 @@ const OngoingEvents: React.FC = () => {
 
           <div className="flex p-4 gap-x-4 mt-4">
             <div className="bg-[#453982] items-center p-4 flex-col w-[180px] gap-y-4 flex justify-center  border border-pink-200 rounded-lg">
-              <p className="text-[20px] font-semibold">
+              <p className="text-[24px] font-semibold">
                 {" "}
                 {items.teamA.symbol}{" "}
                 <span className="text-green-400">+0.5</span>
