@@ -239,7 +239,7 @@ const OngoingEvents: React.FC = () => {
       {/* Modal */}
       {isModalOpen && selectedEvent && (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-[#2D2F6F] p-8 w-[600px] rounded-lg">
+          <div className="bg-[#2D2F6F] p-8 w-[610px] rounded-lg">
             <h2 className="text-white text-2xl font-bold mb-4">
               Bid on a Team
             </h2>
