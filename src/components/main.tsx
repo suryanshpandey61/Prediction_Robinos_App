@@ -283,7 +283,7 @@ const OngoingEvents: React.FC = () => {
                     : selectedEvent.teamB.symbol}
                 </div>
                 <p className="text-white text-xl">
-                  {selectedTeam} <span className="text-green-500">✔</span>
+                  {selectedTeam} <span className="text-green-600">✔</span>
                 </p>
               </div>
             )}
