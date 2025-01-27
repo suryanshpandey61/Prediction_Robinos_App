@@ -193,7 +193,7 @@ function Navbar() {
     : "";
 
   return (
-    <div className="relative  w-full">
+    <div className="relative  ">
       {/* Navbar */}
       <div className="flex justify-end   border-pink-600 rounded-lg p-2 gap-x-3 mt-[20px] ">
         {/* Network Button with Dropdown */}

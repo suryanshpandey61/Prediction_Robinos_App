@@ -14,7 +14,7 @@ const Index: React.FC = () => {
     </div>
   
     {/* Content area */}
-    <div className="flex-1 w-[100vw] ml-[250px]  h-[100vh] pl-4 bg-cover ">
+    <div className="flex-1 w-[100vw] ml-[250px]  overflow-hidden h-[100vh] pl-4 bg-cover ">
       <div className="w-[80%]">
         <Navbar />
       </div>

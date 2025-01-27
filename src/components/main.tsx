@@ -152,7 +152,7 @@ const OngoingEvents: React.FC = () => {
   return (
     <div 
    
-    className="text-white    flex gap-x-5 mt-8 pb-8">
+    className="text-white     flex gap-x-5 mt-8 pb-8">
       {data.map((items, index) => (
         <div
         onClick={()=>openModal(items)}
@@ -614,7 +614,7 @@ const Main: React.FC = () => {
   return (
     <div className="">
       {/* ----------versus--------- */}
-      <div className="mt-[10px] h-[100vh] ml-[50px] lg:ml-[100px] z-10 w-full ">
+      <div className="mt-[10px] h-[100vh] ml-[50px] lg:ml-[100px] z-10  ">
         <h1 className="text-[30px] text-white lg:text-[40px] leading-[40px] mb-[10px] lg:mb-[20px] font-medium">
           Versus
         </h1>
