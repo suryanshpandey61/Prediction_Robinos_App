@@ -11,9 +11,9 @@ const Index: React.FC = () => {
   return <div className=' flex bg-gradient ' >
     
 
-<div className='fixed'><Sidebar/></div>
+<div className='relative'><Sidebar/></div>
 <div> </div>
-<div className=''>
+<div className='relative'>
     <Navbar/>
     
     <Main/>
