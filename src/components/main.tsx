@@ -152,12 +152,12 @@ const OngoingEvents: React.FC = () => {
   return (
     <div 
    
-    className="text-white   flex gap-x-5 mt-8 pb-8">
+    className="text-white    flex gap-x-5 mt-8 pb-8">
       {data.map((items, index) => (
         <div
         onClick={()=>openModal(items)}
           key={index}
-          className="bg-[#2D2F6F] hover:translate-y-[-5.5px] transition-all duration-200 hover:cursor-pointer w-[315px] border border-pink-300 rounded-lg"
+          className="bg-[#2D2F6F] hover:translate-y-[-5.5px] transition-all duration-200 hover:cursor-pointer w-[325px] border border-pink-300 rounded-lg"
         >
           <div className="flex justify-between  items-center">
             <div className="flex flex-col gap-x-4 font-serif mt-5">
@@ -220,12 +220,7 @@ const OngoingEvents: React.FC = () => {
 
            
           </div>
-          {/* <button
-            className="border border-green-300 mb-4 rounded-lg bg-[#825779] transition-all duration-500 hover:bg-green-500 px-6 text-[20px] flex justify-center mx-auto mt-4"
-            onClick={() => openModal(items)}
-          >
-            Prize Pool
-          </button> */}
+         
           <div className="h-[1px] ml-[14px] mt-4 w-[285px] bg-slate-400"></div>
          <div className="flex w-[300px] pl-4 justify-between items-center mt-4 mb-4">
          <p className="text-[16px] ">
