@@ -1,31 +1,31 @@
-import React from 'react'
+import React from 'react';
 import Sidebar from '@/components/sidebar';
-import Main from '@/components/main'
-import "../app/globals.css"
-import bg from '../assets/bg.png'
+import Main from '@/components/main';
+import "../app/globals.css";
+import bg from '../assets/bg.png';
 import Navbar from '@/components/navbar';
 
-
-
 const Index: React.FC = () => {
-  return <div className=' flex bg-gradient ' >
-    
+  return (
+    <div className="flex bg-gradient relative">
+      {/* Sidebar */}
+      <div className="fixed z-10">
+        <Sidebar />
+      </div>
 
-<div className='relative'><Sidebar/></div>
-<div> </div>
-<div className='relative'>
-    <Navbar/>
-    
-    <Main/>
-    
-    
-   
- 
+      {/* Content area */}
+      <div className="flex-1 w-[100vw] ml-[250px] pl-4">
+        <div className='w-[80%]'>
+        <Navbar/>
+        </div>
+        <div className='w-[80%]'>
+          <Main /> 
+        </div>
+        
+        
+      </div>
     </div>
-    
-    
-    
-    </div>;
+  );
 };
 
 export default Index;

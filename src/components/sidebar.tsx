@@ -12,7 +12,7 @@ function sidebar() {
 
 
   return (
-    <div className="w-[300px] h-[100vh] pt-[20px] pl-[20px] space-y-[px] bg-[#061230] text-white">
+    <div className="w-[300px] h-[100vh] relative pt-[20px] pl-[20px] space-y-[px] bg-[#061230] text-white">
       <div className=" h-[110px] ">
         <a href="">
           <Image

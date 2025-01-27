@@ -193,14 +193,14 @@ function Navbar() {
     : "";
 
   return (
-    <div className="relative">
+    <div className="relative  w-full">
       {/* Navbar */}
-      <div className="flex border border-pink-600 rounded-lg p-2 gap-x-3 mt-[20px] ml-[700px]">
+      <div className="flex justify-end   border-pink-600 rounded-lg p-2 gap-x-3 mt-[20px] ">
         {/* Network Button with Dropdown */}
         <div className="relative" ref={networkDropdownRef}>
           <button
             type="button"
-            className="flex bg-slate-700 px-12 py-2 justify-center items-center text-white rounded-md"
+            className="flex border bg-slate-700 px-12 py-2 justify-center items-center text-white rounded-md"
             onClick={toggleDropdown}
           >
             <span className="flex gap-x-3">
@@ -245,7 +245,7 @@ function Navbar() {
           <div className="flex items-center justify-center relative">
             <button
               type="button"
-              className="flex bg-slate-700 px-12 py-2 justify-center items-center text-white rounded-md"
+              className="flex border bg-slate-700 px-12 py-2 justify-center items-center text-white rounded-md"
               onClick={toggleCurrencyDropdown}
             >
               <span className="flex items-center gap-x-2">
@@ -293,11 +293,11 @@ function Navbar() {
         {/* Wallet Connect Button */}
         <div className="text-slate-400 cursor-pointer text-[20px]" onClick={toggleModal}>
           <div className="flex items-center justify-center ">
-            <span className="flex gap-x-1.5 items-center justify-center">
+            <span className="flex border rounded-md px-3 py-1 gap-x-1.5 items-center justify-center">
               {account
                 ? `Connected: ${account.slice(0, 6)}...${account.slice(-4)}`
                 : "Connect wallet"}{" "}
-              <Image src={RBNLogo} alt="RBNLOGO" height={40} />
+              <Image src={RBNLogo} alt="RBNLOGO" height={25} />
             </span>
           </div>
         </div>

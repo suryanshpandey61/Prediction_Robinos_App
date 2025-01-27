@@ -57,7 +57,7 @@ const Portfolio: React.FC = () => {
   return (
     <div className="flex relative bg-gradient">
       <Sidebar />
-      <div className="absolute ml-[250px]">
+      <div className="absolute ml-[350px] lg:ml-[600px] flex justify-end" >
         <Navbar />
       </div>
 
