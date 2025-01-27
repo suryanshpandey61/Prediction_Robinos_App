@@ -614,7 +614,7 @@ const Main: React.FC = () => {
   return (
     <div className="">
       {/* ----------versus--------- */}
-      <div className="mt-[10px] ml-[50px] lg:ml-[100px] z-10 w-full ">
+      <div className="mt-[10px] h-[100vh] ml-[50px] lg:ml-[100px] z-10 w-full ">
         <h1 className="text-[30px] text-white lg:text-[40px] leading-[40px] mb-[10px] lg:mb-[20px] font-medium">
           Versus
         </h1>
