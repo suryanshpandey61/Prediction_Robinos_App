@@ -293,10 +293,10 @@ function Navbar() {
         {/* Wallet Connect Button */}
         <div className="text-slate-400 cursor-pointer w-[30%] text-[18px]" onClick={toggleModal}>
           <div className="flex items-center justify-center ">
-            <span className="flex  rounded-md px-3 py-1 gap-x-1.5 items-center justify-center">
+            <span className="flex rounded-md px-3 py-1 gap-x-1.5 items-center justify-center">
               {account
                 ? `${account.slice(0, 6)}...${account.slice(-4)}`
-                : "Connect wallet"}{" "}
+                : "Connect wallet"}
               <Image src={RBNLogo} alt="RBNLOGO" height={25} />
             </span>
           </div>

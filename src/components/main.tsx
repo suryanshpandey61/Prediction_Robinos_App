@@ -156,7 +156,7 @@ const OngoingEvents: React.FC = () => {
               <Image src={IPLLogo} alt="" className="pr-2 w-[20%]" />
             </div>
 
-            <div className="flex p-4 w-full gap-x-4 ">
+            <div className="flex p-4 w-full gap-x-4">
               {/* Team A */}
               <div className="bg-[#453982] items-center w-[50%] flex-col gap-y-2 flex justify-center border border-pink-200 rounded-lg">
                 <p className="text-[16px]">
@@ -221,23 +221,96 @@ const OngoingEvents: React.FC = () => {
       {/* Modal */}
       {isModalOpen && selectedEvent && (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-[#2D2F6F] p-8 w-[610px] rounded-lg">
-            {/* Modal content */}
-            <p className="text-white">{selectedEvent.league}</p>
-            {/* Add more modal content based on selectedEvent */}
-            <button onClick={closeModal} className="bg-red-500 text-white p-2 rounded-md">Close Modal</button>
+          <div className="bg-[#2D2F6F] p-8 w-[610px] rounded-lg flex gap-x-5">
+            {/* Left Card (Team Selection) */}
+            <div className="w-[45%] bg-[#453982] p-4 rounded-lg flex flex-col items-center justify-between">
+              <p className="text-white text-lg font-semibold">Select Team</p>
+              <div className="flex flex-col gap-y-4">
+                {/* Team A Selection */}
+                <div
+                  className={`flex items-center justify-between p-2 w-full rounded-lg bg-[#4A50A1] cursor-pointer ${selectedTeam === "A" ? "border-2 border-green-400" : ""}`}
+                  onClick={() => handleTeamChange("A")}
+                >
+                  <div className="flex items-center gap-x-2">
+                    <img
+                      src={selectedEvent?.teamA.image}
+                      alt={`${selectedEvent?.teamA.name} Image`}
+                      className="w-[40px] h-[40px] rounded-xl"
+                    />
+                    <p className="text-white">{selectedEvent?.teamA.name}</p>
+                  </div>
+                </div>
+
+                {/* Team B Selection */}
+                <div
+                  className={`flex items-center justify-between p-2 w-full rounded-lg bg-[#4A50A1] cursor-pointer ${selectedTeam === "B" ? "border-2 border-green-400" : ""}`}
+                  onClick={() => handleTeamChange("B")}
+                >
+                  <div className="flex items-center gap-x-2">
+                    <img
+                      src={selectedEvent?.teamB.image}
+                      alt={`${selectedEvent?.teamB.name} Image`}
+                      className="w-[40px] h-[40px] rounded-xl"
+                    />
+                    <p className="text-white">{selectedEvent?.teamB.name}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Card (Balance, Bid & Selected Team) */}
+            <div className="w-[45%] bg-[#453982] p-4 rounded-lg flex flex-col justify-between">
+              {/* Selected Team */}
+              <div>
+                <p className="text-white text-lg font-semibold">Selected Team</p>
+                <div className="flex justify-between items-center text-white text-xl mt-4">
+                  <p>Team: </p>
+                  <p>{selectedTeam === "A" ? selectedEvent?.teamA.name : selectedTeam === "B" ? selectedEvent?.teamB.name : "None"}</p>
+                </div>
+              </div>
+
+              {/* Token Balance */}
+              <div className="mt-4">
+                <p className="text-white text-lg font-semibold">Token Balance</p>
+                <div className="flex justify-between items-center text-white text-xl mt-4">
+                  <p>Balance: </p>
+                  <p>{balance} Tokens</p>
+                </div>
+              </div>
+
+              {/* Bid Section */}
+              <div className="mt-4">
+                <p className="text-white text-lg font-semibold">Place a Bid</p>
+                <div className="flex items-center mt-2">
+                  <input
+                    type="text"
+                    value={amount}
+                    onChange={handleAmountChange}
+                    className="p-2 w-full rounded-lg"
+                    placeholder="Enter amount to bid"
+                  />
+                  <span className="ml-2 text-white text-lg">Tokens</span>
+                </div>
+                <button
+                  onClick={handleSubmit}
+                  className="mt-4 bg-green-600 text-white py-2 rounded-lg w-full"
+                >
+                  Place Bid
+                </button>
+                <button
+                  onClick={closeModal}
+                  className="mt-4 bg-red-500 text-white py-2 rounded-lg w-full"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
     </div>
   );
 };
-
-
-
-
-
-
 
 const ResultsEvents: React.FC = () => {
   const [data, setData] = useState<Event[]>([]); // List of ongoing events
