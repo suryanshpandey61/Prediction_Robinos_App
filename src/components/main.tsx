@@ -28,7 +28,218 @@ interface Event {
 }
 
 // Define placeholder components for Ongoing, Results, and Staked events
+
+
 const OngoingEvents: React.FC = () => {
+  const [data, setData] = useState<Event[]>([]); // List of ongoing events
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTeam, setSelectedTeam] = useState<string | null>(null); // For team selection (A or B)
+  const [amount, setAmount] = useState<string>(""); // Amount to bid
+  const [tokenContract, setTokenContract] = useState<any | null>(null); // State for token contract
+  const [balance, setBalance] = useState<string>("0"); // User token balance
+  const [signer, setSigner] = useState<any | null>(null); // State for the signer
+
+  useEffect(() => {
+    setData(eventData);
+
+    const initializeContract = async () => {
+      if (window.ethereum && selectedEvent && selectedEvent.tokenAddress) {
+        try {
+          const provider = new ethers.BrowserProvider(window.ethereum);
+          const userSigner = await provider.getSigner();
+          if (!userSigner) {
+            alert("No signer found. Make sure your wallet is connected.");
+            return;
+          }
+
+          setSigner(userSigner); // Store signer in state
+
+          const contract = new ethers.Contract(
+            selectedEvent.tokenAddress,
+            [
+              "function transfer(address to, uint amount) public returns (bool)",
+              "function balanceOf(address owner) public view returns (uint256)",
+            ],
+            userSigner
+          );
+
+          setTokenContract(contract);
+
+          const userAddress = await userSigner.getAddress();
+          const userBalance = await contract.balanceOf(userAddress);
+          setBalance(ethers.formatUnits(userBalance, 18)); // Assuming 18 decimals
+        } catch (error) {
+          console.error("Error initializing contract:", error);
+          alert("Failed to initialize the contract. Please check if MetaMask is connected.");
+        }
+      } else {
+        alert("Token address is missing or MetaMask is not available.");
+      }
+    };
+
+    if (selectedEvent) {
+      initializeContract();
+    }
+  }, [selectedEvent]);
+
+  const handleSubmit = async () => {
+    if (selectedTeam && amount && tokenContract && signer) {
+      try {
+        const amountInWei = ethers.parseUnits(amount, 18); // Convert amount to BigNumber in Wei
+        const userAddress = await signer.getAddress();
+
+        const userBalance = await tokenContract.balanceOf(userAddress);
+        const userBalanceInWei = ethers.formatUnits(userBalance, 18); // Convert balance to decimal format
+
+        if (parseFloat(userBalanceInWei) < parseFloat(amount)) {
+          alert("Insufficient balance in the provided token address.");
+          return;
+        }
+
+        const tx = await tokenContract.transfer(userAddress, amountInWei); // Deduct tokens (if required by your contract)
+        await tx.wait();
+
+        const updatedBalance = await tokenContract.balanceOf(userAddress);
+        setBalance(ethers.formatUnits(updatedBalance, 18)); // Update the balance in the UI
+
+        alert(`Bid of ${amount} tokens placed on ${selectedTeam}!`);
+
+        closeModal();
+      } catch (error) {
+        console.error("Error making transaction:", error);
+        alert("Failed to place bid.");
+      }
+    } else {
+      alert("Please select a team and enter a valid amount.");
+    }
+  };
+
+  const openModal = (event: Event) => {
+    setSelectedEvent(event);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedEvent(null);
+  };
+
+  const handleTeamChange = (team: string) => {
+    setSelectedTeam(team);
+  };
+
+  const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAmount(event.target.value);
+  };
+
+  return (
+    <div className="text-white w-full flex flex-col gap-x-5 mt-8 pb-8">
+      {/* Scrollable Cards Container */}
+      <div className="overflow-y-auto gap-y-4 max-h-[600px] flex gap-x-5 flex-wrap scrollbar-hidden">
+        {data.map((items, index) => (
+          <div
+            onClick={() => openModal(items)} // Opens the modal on click
+            key={index}
+            className="bg-[#2D2F6F] hover:translate-y-[-5.5px] transition-all duration-200 hover:cursor-pointer w-[31.8%] border border-pink-300 rounded-lg"
+          >
+            {/* Content of each event */}
+            <div className="flex justify-between items-center">
+              <div className="flex flex-col gap-x-4 font-serif mt-5">
+                <p className="text-slate-400 font-bold pl-4">{items.league}</p>
+                <div className="flex gap-x-1 items-center pl-4 text-[20px]">
+                  <p>{items.teamA.name}</p> v.
+                  <p>{items.teamB.name}</p>
+                </div>
+              </div>
+
+              <Image src={IPLLogo} alt="" className="pr-2 w-[20%]" />
+            </div>
+
+            <div className="flex p-4 w-full gap-x-4 ">
+              {/* Team A */}
+              <div className="bg-[#453982] items-center w-[50%] flex-col gap-y-2 flex justify-center border border-pink-200 rounded-lg">
+                <p className="text-[16px]">
+                  {items.teamA.symbol} <span className="text-green-400">+0.5</span>
+                </p>
+                <img
+                  src={items.teamA.image}
+                  alt={`${items.teamA} Image`}
+                  className="object-cover w-[80px] rounded-xl"
+                />
+                <div className="flex flex-col ml-[-70px]">
+                  <p className="text-slate-400 font-semibold">ROI</p>
+                  <p className="text-[20px]">1.90</p>
+                </div>
+              </div>
+              {/* Team B */}
+              <div className="bg-[#453982] pt-2 flex-col w-[50%] items-center flex justify-center gap-y-4 border border-pink-200 rounded-lg">
+                <p className="text-[16px]">
+                  {items.teamB.symbol} <span className="text-red-600">-0.5</span>
+                </p>
+                <img
+                  src={items.teamB.image}
+                  alt={`${items.teamB} Image`}
+                  className="object-cover w-[80px] flex justify-center rounded-xl"
+                />
+                <div className="flex flex-col ml-[-50px]">
+                  <p className="text-slate-400 font-bold">ROI</p>
+                  <p className="text-[20px]">1.90</p>
+                </div>
+              </div>
+            </div>
+            <div className="w-[95%] pl-4">
+              <Slider />
+            </div>
+
+            {/* Prize Pool */}
+            <div className="pl-4 cursor-pointer mt-4">
+              <div className="flex justify-between rounded-lg bg-[#061230] w-[95%] pl-4 items-center">
+                <div className="flex flex-col gap-x-2 py-[6px]">
+                  <p className="text-slate-400 items-center flex font-bold">Prize Pool</p>
+                  <div className="flex gap-x-1 items-center text-[20px]">
+                    <p className="font-bold flex items-center">40.0K RBN</p>
+                  </div>
+                </div>
+                <Image src={RobinoLogo} alt="" className="pr-2 w-[48px]" />
+              </div>
+            </div>
+
+            <div className="h-[1px] ml-[14px] mt-4 w-[90%] bg-slate-400"></div>
+            <div className="flex w-full pl-4 justify-between items-center mt-4 mb-4">
+              <p className="text-[16px]">
+                Sale End at <span className="font-semibold"> {items.saleEnds}</span>
+              </p>
+              <div className="pr-5">
+                <SlCalender />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Modal */}
+      {isModalOpen && selectedEvent && (
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-[#2D2F6F] p-8 w-[610px] rounded-lg">
+            {/* Modal content */}
+            <p className="text-white">{selectedEvent.league}</p>
+            {/* Add more modal content based on selectedEvent */}
+            <button onClick={closeModal} className="bg-red-500 text-white p-2 rounded-md">Close Modal</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+
+
+
+
+
+
+const ResultsEvents: React.FC = () => {
   const [data, setData] = useState<Event[]>([]); // List of ongoing events
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -137,9 +348,9 @@ const OngoingEvents: React.FC = () => {
       <div className="overflow-y-auto gap-y-4 max-h-[600px] flex gap-x-5 flex-wrap scrollbar-hidden">
         {data.map((items, index) => (
           <div
-            onClick={() => openModal(items)}
+         
             key={index}
-            className="bg-[#2D2F6F] hover:translate-y-[-5.5px] transition-all duration-200 hover:cursor-pointer w-[29%] border border-pink-300 rounded-lg"
+            className="bg-[#2D2F6F] hover:translate-y-[-5.5px] transition-all duration-200 hover:cursor-pointer w-[31.8%] border border-pink-300 rounded-lg"
           >
             <div className="flex justify-between items-center">
               <div className="flex flex-col gap-x-4 font-serif mt-5">
@@ -153,8 +364,8 @@ const OngoingEvents: React.FC = () => {
               <Image src={IPLLogo} alt="" className="pr-2 w-[20%]" />
             </div>
 
-            <div className="flex p-4 w-full gap-x-4 mt-4">
-              <div className="bg-[#453982] items-center w-[50%] p-4 flex-col gap-y-4 flex justify-center border border-pink-200 rounded-lg">
+            <div className="flex p-4 w-full gap-x-4 ">
+              <div className="bg-[#5334ee] items-center w-[50%]  flex-col gap-y-2 flex justify-center border border-pink-200 rounded-lg">
                 <p className="text-[16px]">
                   {items.teamA.symbol} <span className="text-green-400">+0.5</span>
                 </p>
@@ -163,12 +374,18 @@ const OngoingEvents: React.FC = () => {
                   alt={`${items.teamA} Image`}
                   className="object-cover w-[80px] rounded-xl"
                 />
-                <div className="flex flex-col ml-[-70px]">
+                <div className="flex ">
+                <div className="flex flex-col ">
                   <p className="text-slate-400 font-semibold">ROI</p>
                   <p className="text-[20px]">1.90</p>
                 </div>
+                <div className="text-[25px]  ml-9 mt-8 flex items-center">
+              <TiPlus />
+            </div>
+                </div>
+              
               </div>
-              <div className="bg-[#453982] p-4 flex-col w-[50%] items-center flex justify-center gap-y-4 border border-pink-200 rounded-lg">
+              <div className="bg-[#453982] pt-2  flex-col w-[50%] items-center flex justify-center gap-y-4 border border-pink-200 rounded-lg">
                 <p className="text-[16px]">
                   {items.teamB.symbol} <span className="text-red-600">-0.5</span>
                 </p>
@@ -180,6 +397,7 @@ const OngoingEvents: React.FC = () => {
                 <div className="flex flex-col ml-[-50px]">
                   <p className="text-slate-400 font-bold">ROI</p>
                   <p className="text-[20px]">1.90</p>
+                  
                 </div>
               </div>
             </div>
@@ -202,10 +420,10 @@ const OngoingEvents: React.FC = () => {
             <div className="h-[1px] ml-[14px] mt-4 w-[90%] bg-slate-400"></div>
             <div className="flex w-full pl-4 justify-between items-center mt-4 mb-4">
               <p className="text-[16px]">
-                Sale End at <span className="font-semibold"> {items.saleEnds}</span>
+                Rewards Distributed
               </p>
               <div className="pr-5">
-                <SlCalender />
+              <AiFillThunderbolt />
               </div>
             </div>
           </div>
@@ -222,217 +440,6 @@ const OngoingEvents: React.FC = () => {
         </div>
       )}
     </div>
-  );
-};
-
-
-
-
-const ResultsEvents: React.FC = () => {
-  const [data, setData] = useState<Event[]>([]); // List of ongoing events
-  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedTeam, setSelectedTeam] = useState<string | null>(null); // For team selection (A or B)
-  const [amount, setAmount] = useState<string>(""); // Amount to bid
-  const [tokenContract, setTokenContract] = useState<any | null>(null); // State for token contract
-  const [balance, setBalance] = useState<string>("0"); // User token balance
-  const [signer, setSigner] = useState<any | null>(null); // State for the signer
-
-  useEffect(() => {
-    setData(eventData);
-
-    // Function to initialize the contract asynchronously
-    const initializeContract = async () => {
-      if (window.ethereum && selectedEvent && selectedEvent.tokenAddress) {
-        try {
-          // Initialize provider and signer
-          const provider = new ethers.BrowserProvider(window.ethereum);
-          const userSigner = await provider.getSigner();
-          if (!userSigner) {
-            alert("No signer found. Make sure your wallet is connected.");
-            return;
-          }
-
-          setSigner(userSigner); // Store signer in state
-
-          // Initialize contract only if tokenAddress is available
-          const contract = new ethers.Contract(
-            selectedEvent.tokenAddress,
-            [
-              "function transfer(address to, uint amount) public returns (bool)",
-              "function balanceOf(address owner) public view returns (uint256)",
-            ],
-            userSigner
-          );
-
-          setTokenContract(contract);
-
-          // Fetch the user's token balance
-          const userAddress = await userSigner.getAddress();
-          const userBalance = await contract.balanceOf(userAddress);
-          setBalance(ethers.formatUnits(userBalance, 18)); // Assuming 18 decimals
-        } catch (error) {
-          console.error("Error initializing contract:", error);
-          alert(
-            "Failed to initialize the contract. Please check if MetaMask is connected."
-          );
-        }
-      } else {
-        alert("Token address is missing or MetaMask is not available.");
-      }
-    };
-
-    if (selectedEvent) {
-      initializeContract();
-    }
-  }, [selectedEvent]); // Dependency on selectedEvent to initialize contract and fetch balance
-
-  const handleSubmit = async () => {
-    if (selectedTeam && amount && tokenContract && signer) {
-      try {
-        const amountInWei = ethers.parseUnits(amount, 18); // Convert amount to BigNumber in Wei
-        const userAddress = await signer.getAddress(); // Get the user's address from the signer
-
-        // Fetch the user's current token balance
-        const userBalance = await tokenContract.balanceOf(userAddress);
-        const userBalanceInWei = ethers.formatUnits(userBalance, 18); // Convert balance to decimal format
-
-        // Check if the user has enough balance
-        if (parseFloat(userBalanceInWei) < parseFloat(amount)) {
-          alert("Insufficient balance in the provided token address.");
-          return;
-        }
-
-        // Deduct the amount from the user's balance
-        const tx = await tokenContract.transfer(userAddress, amountInWei); // Deduct tokens (if required by your contract)
-
-        // Wait for the transaction to be mined
-        await tx.wait();
-
-        // After the transaction is successful, update the user's token balance
-        const updatedBalance = await tokenContract.balanceOf(userAddress);
-        setBalance(ethers.formatUnits(updatedBalance, 18)); // Update the balance in the UI
-
-        // Show success message
-        alert(`Bid of ${amount} tokens placed on ${selectedTeam}!`);
-
-        // Close the modal after success
-        closeModal();
-      } catch (error) {
-        console.error("Error making transaction:", error);
-        alert("Failed to place bid.");
-      }
-    } else {
-      alert("Please select a team and enter a valid amount.");
-    }
-  };
-
-  // Open the modal and set the selected event
-  const openModal = (event: Event) => {
-    setSelectedEvent(event);
-    setIsModalOpen(true);
-  };
-
-  // Close the modal
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedEvent(null); // Reset selected event when closing the modal
-  };
-
-  // Handle team selection for bidding
-  const handleTeamChange = (team: string) => {
-    setSelectedTeam(team);
-  };
-
-  // Handle amount input change
-  const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAmount(event.target.value);
-  };
-
-  return (
-    <div className="text-white flex gap-x-5 mt-8 pb-8 overflow-y-auto max-h-[600px]">
-  {data.map((items, index) => (
-    <div
-      key={index}
-      className="bg-[#2D2F6F] hover:translate-y-[-5.5px] transition-all duration-200 hover:cursor-pointer w-[29%] border   rounded-lg"
-    >
-      <div className="flex justify-between  items-center">
-        <div className="flex flex-col gap-x-2 font-serif mt-5">
-          <p className="text-slate-400  font-bold pl-4">{items.league}</p>
-          <div className="flex gap-x-1 items-center pl-4 text-[20px] ">
-            <p className=""> {items.teamA.name}</p> v.
-            <p>{items.teamB.name}</p>
-          </div>
-        </div>
-
-        <Image src={IPLLogo} alt="" className="pr-2 w-[60px]" />
-      </div>
-
-      <div className="flex p-4 gap-x-4 mt-4">
-        <div className="bg-[#7860f2] items-center p-4 flex-col w-[50%] gap-y-4 flex justify-center  border-[2px] border-pink-600 rounded-lg">
-          <p className="text-[20px] font-semibold">
-            {" "}
-            {items.teamA.symbol}{" "}
-            <span className="text-green-400">+0.5</span>
-          </p>
-          <img
-            src={items.teamA.image}
-            alt={`${items.teamA} Image`}
-            className="object-cover w-[80px] rounded-xl"
-          />
-          <div className=" flex gap-x-6">
-            <div className="flex px] mt-2  flex-col ">
-              <p className="text-slate-400 font-bold">ROI</p>
-              <p className="text-[20px]">1.90</p>
-            </div>
-            <div className="text-[35px] ml-3 mt-7 flex items-center">
-              <TiPlus />
-            </div>
-          </div>
-        </div>
-        <div className=" p-4 flex-col w-[50%] items-center  flex justify-center gap-y-4 bg-[#2f2176]  rounded-lg">
-          <p className="text-[20px] font-semibold">
-            {items.teamB.symbol} <span className="text-red-600">-0.5</span>
-          </p>
-          <img
-            src={items.teamB.image}
-            alt={`${items.teamB} Image`}
-            className="object-cover w-[80px] flex justify-center rounded-xl"
-          />
-          <div className="flex  flex-col ml-[-50px] ">
-            <p className="text-slate-400 font-bold">ROI</p>
-            <p className="text-[20px]">1.90</p>
-          </div>
-        </div>
-      </div>
-      <div className="pl-4 w-[100%]">
-        <div className="w-[93%]">
-          <Slider />
-        </div>
-      </div>
-
-      <div className="pl-4 cursor-pointer mt-4" >
-        <div className="flex justify-between  rounded-lg bg-[#061230] w-[93%] pl-4  items-center">
-          <div className="flex flex-col gap-x-2  py-[6px]">
-            <p className="text-slate-400  items-center flex font-bold ">Prize Pool</p>
-            <div className="flex gap-x-1 items-center text-[20px] ">
-              <p className="font-bold flex items-center">40.0K RBN </p>
-            </div>
-          </div>
-          <Image src={RobinoLogo} alt="" className="pr-2 w-[48px]" />
-        </div>
-      </div>
-
-      <div className="h-[1px] ml-[14px] mt-4 w-[90%] bg-slate-400"></div>
-      <div className="flex w-[95%] pl-4 justify-between items-center mt-4 mb-4">
-        <p className="text-[16px] ">
-          Reward Distributed
-        </p><AiFillThunderbolt />
-      </div>
-    </div>
-  ))}
-</div>
-
   );
 };
 
@@ -515,7 +522,7 @@ const Main: React.FC = () => {
   return (
     <div className="ml-[4%] flex ">
       {/* ----------versus--------- */}
-      <div className="mt-[10px]   z-10 w-[85%]  ">
+      <div className="mt-[10px]   z-10 w-[80%]  ">
         <h1 className="text-[30px] text-white lg:text-[40px] leading-[40px] mb-[10px] lg:mb-[20px] font-medium">
           Versus
         </h1>
@@ -600,7 +607,7 @@ const Main: React.FC = () => {
                 type="button"
                 ref={tokensButtonRef}
                 onClick={toggleTokensDropdown}
-                className="flex h-[60px] items-center justify-between rounded-[10px] border border-slate-700 text-white px-[10px] xl:px-[20px] w-full"
+                className="flex  h-[60px] items-center justify-between rounded-[10px] border border-slate-700 text-white px-[10px] xl:px-[20px] w-full"
               >
                 <span>{selectedToken}</span>
                 <svg
@@ -622,7 +629,7 @@ const Main: React.FC = () => {
               {isTokensDropdownOpen && (
                 <ul
                   ref={tokensDropdownRef}
-                  className="absolute top-[70px]  z-10 text-white border rounded-[10px] w-[50%] p-4 shadow-md"
+                  className="absolute top-[70px]  bg-slate-900 z-10 text-white border rounded-[10px] w-[50%] p-4 shadow-md"
                 >
                   {["All Tokens", "RBN"].map((token) => (
                     <li
@@ -663,7 +670,7 @@ const Main: React.FC = () => {
               {isSportsDropdownOpen && (
                 <ul
                   ref={sportsDropdownRef}
-                  className="absolute top-[70px] right-0 z-10 border text-white rounded-[10px] w-[50%] p-4 shadow-md"
+                  className="absolute top-[70px] bg-slate-900 right-0 z-10 border text-white rounded-[10px] w-[50%] p-4 shadow-md"
                 >
                   {["All Sports", "Other", "Fifa", "Crypto", "Football"].map((sport) => (
                     <li
