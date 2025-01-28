@@ -89,11 +89,14 @@ const Portfolio: React.FC = () => {
   };
 
   return (
-    <div className="flex relative w-[100vw] bg-gradient">
+    <div className="flex relative overflow-x-hidden w-[100vw] bg-gradient">
+      <div className="flex justify-end">
       <Sidebar />
-      <div className="flex-col w-[80%] flex">
+      </div>
+    
+      <div className="flex-col w-[75%] flex">
         <Navbar />
-        <div className="mt-[70px] ml-[100px]">
+        <div className=" ml-[100px]">
           <h1 className="text-white text-[40px]">Portfolio</h1>
 
           {/* Wallet Section */}
@@ -324,8 +327,6 @@ const Portfolio: React.FC = () => {
                     >
                       {[
                         "League",
-                        "Seria A 24/25",
-                        "Las Vegas 24/25",
                         "EPL 24/25",
                         "Laliga 24/25",
                       ].map((sport) => (

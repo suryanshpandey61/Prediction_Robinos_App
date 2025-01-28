@@ -286,7 +286,7 @@ const OngoingEvents: React.FC = () => {
                     type="text"
                     value={amount}
                     onChange={handleAmountChange}
-                    className="p-2 w-full rounded-lg"
+                    className="p-2 text-black w-full rounded-lg"
                     placeholder="Enter amount to bid"
                   />
                   <span className="ml-2 text-white text-lg">Tokens</span>
