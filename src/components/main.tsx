@@ -256,6 +256,13 @@ const OngoingEvents: React.FC = () => {
                   </div>
                 </div>
               </div>
+              <div className="mt-4">
+              
+                <div className="flex  gap-x-2 items-center text-white text-xl mt-4">
+                  <p>Balance : </p>
+                  <p className="text-yellow-600">{balance} Tokens</p>
+                </div>
+              </div>
             </div>
 
             {/* Right Card (Balance, Bid & Selected Team) */}
@@ -270,13 +277,7 @@ const OngoingEvents: React.FC = () => {
               </div>
 
               {/* Token Balance */}
-              <div className="mt-4">
-                <p className="text-white text-lg font-semibold">Token Balance</p>
-                <div className="flex justify-between items-center text-white text-xl mt-4">
-                  <p>Balance: </p>
-                  <p>{balance} Tokens</p>
-                </div>
-              </div>
+            
 
               {/* Bid Section */}
               <div className="mt-4">
@@ -293,13 +294,13 @@ const OngoingEvents: React.FC = () => {
                 </div>
                 <button
                   onClick={handleSubmit}
-                  className="mt-4 bg-green-600 text-white py-2 rounded-lg w-full"
+                  className="mt-4 bg-green-600 hover:bg-green-400 transition-all duration-500 text-white py-2 rounded-lg w-full"
                 >
                   Place Bid
                 </button>
                 <button
                   onClick={closeModal}
-                  className="mt-4 bg-red-500 text-white py-2 rounded-lg w-full"
+                  className="mt-4 bg-red-500 hover:bg-red-400 transition-all duration-500 text-white py-2 rounded-lg w-full"
                 >
                   Close
                 </button>
