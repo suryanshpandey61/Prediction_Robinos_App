@@ -5,18 +5,18 @@ const Slider: React.FC = () => {
   const sliderValue: number = 50;
 
   return (
-    <div className="flex justify-center items-center border rounded-md px-1 py-4 w-[280px] bg-[#383687]">
-      <div className="flex items-center gap-x-1">
+    <div className="flex justify-center items-center border rounded-md  py-4 bg-[#383687]">
+      <div className="flex items-center w-full p-1 gap-x-1">
         {/* Display the percentage */}
         <p className="text-[20px] font-bold">{sliderValue}%</p>
         
-        <div className="relative">
+        <div className="relative w-full">
           {/* Background of the Slider */}
           <input
             type="range"
             value={sliderValue}
             readOnly
-            className="w-[180px] h-2 rounded-full appearance-none"
+            className="w-[100%] h-2 rounded-full appearance-none"
             style={{
               backgroundSize: '50% 100%', // Fill the first 50% with the gradient
               backgroundImage: 'linear-gradient(to right, #C076E5, #FDD158)', // Gradient from purple to yellow

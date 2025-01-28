@@ -5,11 +5,22 @@
 
 .bg-gradient{
   background-image: url('../assets/bg.png');
-  background-size: cover;
-  background-position: center center;
-  background-attachment: fixed;
+  background-size: 150%;
+  background-position-x:50%;
+  background-position-y:0% ;
   height: 100vh;
+
+  
 }
+.scrollbar-hidden {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
 .img{
   background-image: url('../assets/robinos_islogo.svg');
 }

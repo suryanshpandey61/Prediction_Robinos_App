@@ -351,7 +351,7 @@ const Portfolio: React.FC = () => {
               <div>Stake</div>
               <div>Reward</div>
             </div>
-            <div className="bg-white w-[72%] mt-[-5px] ml-[8px] absolute h-[1px]"></div>
+            {/* <div className="bg-white w-[72%] mt-[-5px] ml-[8px] absolute h-[1px]"></div> */}
             <div className="text-white font-semibold">Versus Events</div>
           </div>
         </div>

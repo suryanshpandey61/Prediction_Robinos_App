@@ -193,14 +193,14 @@ function Navbar() {
     : "";
 
   return (
-    <div className="relative  ">
+    <div className="w-[100vw]  ">
       {/* Navbar */}
-      <div className="flex justify-end   border-pink-600 rounded-lg p-2 gap-x-3 mt-[20px] ">
+      <div className="flex bg-[#061230] mt-[1%] justify-items-end ml-[37%]  border w-[35%]  border-pink-600 rounded-lg p-2 gap-x-3  ">
         {/* Network Button with Dropdown */}
-        <div className="relative" ref={networkDropdownRef}>
+        <div className="relative mt-0 " ref={networkDropdownRef}>
           <button
             type="button"
-            className="flex border bg-slate-700 px-12 py-2 justify-center items-center text-white rounded-md"
+            className="flex  bg-[#192249] px-2 py-1 justify-center items-center text-white rounded-md"
             onClick={toggleDropdown}
           >
             <span className="flex gap-x-3">
@@ -223,11 +223,11 @@ function Navbar() {
           </button>
 
           {dropdownVisible && (
-            <div className="absolute top-[60px] left-0 bg-[#061230] text-white rounded-lg shadow-lg w-[245px] z-50">
+            <div className="absolute top-[45px] left-0 bg-[#192249] text-white rounded-lg shadow-lg w-[100%] z-50">
               {networks.map((net) => (
                 <div
                   key={net.name}
-                  className="px-6 py-2 hover:bg-blue-600 rounded-xl cursor-pointer"
+                  className="px-6  py-2 hover:bg-blue-600 rounded-xl cursor-pointer"
                   onClick={() => handleNetworkChange(net.name)}
                 >
                   <div className="flex items-center">
@@ -245,10 +245,10 @@ function Navbar() {
           <div className="flex items-center justify-center relative">
             <button
               type="button"
-              className="flex border bg-slate-700 px-12 py-2 justify-center items-center text-white rounded-md"
+              className="flex  bg-[#192249] px-2 py-1  justify-center items-center text-white rounded-md"
               onClick={toggleCurrencyDropdown}
             >
-              <span className="flex items-center gap-x-2">
+              <span className="flex  items-center gap-x-2">
                 {currency === "USDM" && (
                   <Image src={dollarIcon} alt="Dollar" width={20} height={20} />
                 )}
@@ -267,7 +267,7 @@ function Navbar() {
             </button>
 
             {currencyDropdownVisible && (
-              <div className="absolute top-[55px] left-0 bg-[#061230] text-white rounded-lg shadow-lg w-[240px] z-50">
+              <div className="absolute top-[45px] left-0 bg-[#192249] text-white rounded-lg shadow-lg w-[100%] z-50">
                 {currencies.map((curr) => (
                   <div
                     key={curr.name}
@@ -291,11 +291,11 @@ function Navbar() {
         </div>
 
         {/* Wallet Connect Button */}
-        <div className="text-slate-400 cursor-pointer text-[20px]" onClick={toggleModal}>
+        <div className="text-slate-400 cursor-pointer w-[30%] text-[18px]" onClick={toggleModal}>
           <div className="flex items-center justify-center ">
-            <span className="flex border rounded-md px-3 py-1 gap-x-1.5 items-center justify-center">
+            <span className="flex  rounded-md px-3 py-1 gap-x-1.5 items-center justify-center">
               {account
-                ? `Connected: ${account.slice(0, 6)}...${account.slice(-4)}`
+                ? `${account.slice(0, 6)}...${account.slice(-4)}`
                 : "Connect wallet"}{" "}
               <Image src={RBNLogo} alt="RBNLOGO" height={25} />
             </span>
