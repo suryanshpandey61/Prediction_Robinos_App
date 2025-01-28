@@ -67,8 +67,8 @@ const OngoingEvents: React.FC = () => {
           setTokenContract(contract);
 
           const userAddress = await userSigner.getAddress();
-          const userBalance = await contract.balanceOf(userAddress);
-          setBalance(ethers.formatUnits(userBalance, 18)); // Assuming 18 decimals
+          // const userBalance = await contract.balanceOf(userAddress);
+          // setBalance(ethers.formatUnits(userBalance, 18)); // Assuming 18 decimals
         } catch (error) {
           console.error("Error initializing contract:", error);
           alert("Failed to initialize the contract. Please check if MetaMask is connected.");
@@ -223,19 +223,19 @@ const OngoingEvents: React.FC = () => {
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-[#2D2F6F] p-8 w-[610px] rounded-lg flex gap-x-5">
             {/* Left Card (Team Selection) */}
-            <div className="w-[45%] bg-[#453982] p-4 rounded-lg flex flex-col items-center justify-between">
+            <div className="w-[55%] bg-[#453982] p-4 rounded-lg flex flex-col items-center ">
               <p className="text-white text-lg font-semibold">Select Team</p>
-              <div className="flex flex-col gap-y-4">
+              <div className="flex gap-x-3 mt-[20%]">
                 {/* Team A Selection */}
                 <div
-                  className={`flex items-center justify-between p-2 w-full rounded-lg bg-[#4A50A1] cursor-pointer ${selectedTeam === "A" ? "border-2 border-green-400" : ""}`}
+                  className={`flex items-center flex-col justify-between p-2 w-full rounded-lg bg-[#4A50A1] cursor-pointer ${selectedTeam === "A" ? "border-2 border-green-400" : ""}`}
                   onClick={() => handleTeamChange("A")}
                 >
-                  <div className="flex items-center gap-x-2">
+                  <div className="flex flex-col items-center gap-y-2 gap-x-2">
                     <img
                       src={selectedEvent?.teamA.image}
                       alt={`${selectedEvent?.teamA.name} Image`}
-                      className="w-[40px] h-[40px] rounded-xl"
+                      className=" rounded-xl"
                     />
                     <p className="text-white">{selectedEvent?.teamA.name}</p>
                   </div>
@@ -243,14 +243,14 @@ const OngoingEvents: React.FC = () => {
 
                 {/* Team B Selection */}
                 <div
-                  className={`flex items-center justify-between p-2 w-full rounded-lg bg-[#4A50A1] cursor-pointer ${selectedTeam === "B" ? "border-2 border-green-400" : ""}`}
+                  className={`flex  items-center justify-between p-2 w-full rounded-lg bg-[#4A50A1] cursor-pointer ${selectedTeam === "B" ? "border-2 border-green-400" : ""}`}
                   onClick={() => handleTeamChange("B")}
                 >
-                  <div className="flex items-center gap-x-2">
+                  <div className="flex flex-col gap-y-2 items-center gap-x-2">
                     <img
                       src={selectedEvent?.teamB.image}
                       alt={`${selectedEvent?.teamB.name} Image`}
-                      className="w-[40px] h-[40px] rounded-xl"
+                      className="  rounded-xl"
                     />
                     <p className="text-white">{selectedEvent?.teamB.name}</p>
                   </div>
