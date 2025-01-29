@@ -195,7 +195,7 @@ function Navbar() {
   return (
     <div className="w-[100vw]  ">
       {/* Navbar */}
-      <div className="flex bg-[#061230] mt-[1%] justify-items-end ml-[37%]  border w-[35%]  border-pink-600 rounded-lg p-2 gap-x-3  ">
+      <div className="flex bg-[#061230] mt-[1%] justify-items-end ml-[43%]  border w-[35%]  border-pink-600 rounded-lg p-2 gap-x-3  ">
         {/* Network Button with Dropdown */}
         <div className="relative mt-0 " ref={networkDropdownRef}>
           <button
