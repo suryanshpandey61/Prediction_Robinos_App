@@ -3,13 +3,9 @@ import Image from "next/image";
 import React from "react";
 import logo from "../assets/robinos_islogo.svg";
 import { FaWallet } from "react-icons/fa";
-import { useState } from "react";
+
 function sidebar() {
 
-  const [isClicked, setIsClicked] = useState(false);
-  const handleButtonClick = () => {
-    setIsClicked(!isClicked); // Toggle the color
-  };
   const handleRefresh = () => {
     window.location.reload(); // This will reload the page
   };
@@ -32,10 +28,10 @@ function sidebar() {
         </a>
       </div>
       <ul className="text-slate-500 text-[18px] font-medium">
-        <li className={` ${isClicked}? 'text-blue-600':'text-slate-500' mb-[40px] hover:text-blue-600` }>
+        <li className="mb-[40px] hover:text-blue-600 ">
           <Link
             href="/"
-            className={``}
+            className="hover:text-blue-600 "
             aria-label="versus-events"
             
           >
