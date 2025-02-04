@@ -296,7 +296,7 @@ const OngoingEvents: React.FC = () => {
                   onClick={handleSubmit}
                   className="mt-4 bg-green-600 hover:bg-green-400 transition-all duration-500 text-white py-2 rounded-lg w-full"
                 >
-                  Place Bids
+                  Place Bid
                 </button>
                 <button
                   onClick={closeModal}
