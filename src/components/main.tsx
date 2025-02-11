@@ -294,7 +294,7 @@ const OngoingEvents: React.FC = () => {
                 </div>
                 <button
                   onClick={handleSubmit}
-                  className="mt-4 bg-green-600 hover:bg-green-400 transition-all duration-500 text-white py-2 rounded-lg w-full"
+                  className="mt-2 bg-green-600 hover:bg-green-400 transition-all duration-500 text-white py-2 rounded-lg w-full"
                 >
                   Place Bid
                 </button>
