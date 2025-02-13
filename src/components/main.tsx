@@ -156,7 +156,7 @@ const OngoingEvents: React.FC = () => {
               <Image src={IPLLogo} alt="" className="pr-2 w-[20%]" />
             </div>
 
-            <div className="flex p-2 w-full gap-x-4">
+            <div className="flex p-4 w-full gap-x-4">
               {/* Team A */}
               <div className="bg-[#453982] items-center w-[50%] flex-col gap-y-2 flex justify-center border border-pink-200 rounded-lg">
                 <p className="text-[16px]">
