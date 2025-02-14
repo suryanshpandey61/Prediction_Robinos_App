@@ -290,7 +290,7 @@ const OngoingEvents: React.FC = () => {
                     className="p-2 text-black w-full rounded-lg"
                     placeholder="Enter amount to bid"
                   />
-                  <span className="ml-2 text-white text-lg">Tokens</span>
+                  <span className="ml-4 text-white text-lg">Tokens</span>
                 </div>
                 <button
                   onClick={handleSubmit}
