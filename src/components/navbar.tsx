@@ -245,7 +245,7 @@ function Navbar() {
           <div className="flex items-center justify-center relative">
             <button
               type="button"
-              className="flex  bg-[#192249] px-2 py-1  justify-center items-center text-white rounded-md"
+              className="flex  bg-[#192249] px-3 py-1  justify-center items-center text-white rounded-md"
               onClick={toggleCurrencyDropdown}
             >
               <span className="flex  items-center gap-x-4">
