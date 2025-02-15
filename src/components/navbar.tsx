@@ -248,7 +248,7 @@ function Navbar() {
               className="flex  bg-[#192249] px-2 py-1  justify-center items-center text-white rounded-md"
               onClick={toggleCurrencyDropdown}
             >
-              <span className="flex  items-center gap-x-2">
+              <span className="flex  items-center gap-x-4">
                 {currency === "USDM" && (
                   <Image src={dollarIcon} alt="Dollar" width={20} height={20} />
                 )}
