@@ -36,6 +36,7 @@ const Slider: React.FC = () => {
               }
               input[type="range"]::-moz-range-thumb {
                 width: 0;  /* Hide the thumb */
+         
                 height: 0; /* Hide the thumb */
                 background: transparent; /* Make sure the thumb is invisible */
               }
@@ -44,7 +45,7 @@ const Slider: React.FC = () => {
         </div>
 
         {/* Display the percentage on the other side */}
-        <p className="text-[20px] font-bold">{sliderValue}%</p>
+        <p className="text-[21px] font-bold">{sliderValue}%</p>
       </div>
     </div>
   );
