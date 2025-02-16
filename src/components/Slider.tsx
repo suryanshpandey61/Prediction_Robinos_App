@@ -45,7 +45,8 @@ const Slider: React.FC = () => {
         </div>
 
         {/* Display the percentage on the other side */}
-        <p className="text-[21px] font-bold">{sliderValue}%</p>
+        <p className="text-[20
+          px] font-bold">{sliderValue}%</p>
       </div>
     </div>
   );
