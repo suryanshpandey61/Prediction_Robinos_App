@@ -271,7 +271,7 @@ function Navbar() {
                 {currencies.map((curr) => (
                   <div
                     key={curr.name}
-                    className="px-6 py-2 hover:bg-blue-600 rounded-xl cursor-pointer"
+                    className="px-5 py-2 hover:bg-blue-600 rounded-xl cursor-pointer"
                     onClick={() => handleCurrencyChange(curr.name)}
                   >
                     <div className="flex items-center">
