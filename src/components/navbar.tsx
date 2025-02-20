@@ -232,7 +232,7 @@ function Navbar() {
                 >
                   <div className="flex items-center">
                     <Image src={net.logo} alt={net.name} width={20} height={20} />
-                    <span className="ml-3">{net.name}</span>
+                    <span className="ml-4">{net.name}</span>
                   </div>
                 </div>
               ))}
