@@ -136,7 +136,7 @@ const OngoingEvents: React.FC = () => {
   return (
     <div className="text-white w-full flex flex-col gap-x-5 mt-8 pb-8">
       {/* Scrollable Cards Container */}
-      <div className="overflow-y-auto gap-y-3 max-h-[600px] flex gap-x-5 flex-wrap scrollbar-hidden">
+      <div className="overflow-y-auto gap-y-4 max-h-[600px] flex gap-x-5 flex-wrap scrollbar-hidden">
         {data.map((items, index) => (
           <div
             onClick={() => openModal(items)} // Opens the modal on click
