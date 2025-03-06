@@ -258,7 +258,7 @@ const OngoingEvents: React.FC = () => {
               </div>
               <div className="mt-4">
               
-                <div className="flex  gap-x-2 items-center text-white text-xl mt-4">
+                <div className="flex  gap-x-1 items-center text-white text-xl mt-4">
                   <p>Balance : </p>
                   <p className="text-yellow-600">{balance} Tokens</p>
                 </div>
